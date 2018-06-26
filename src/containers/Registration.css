@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic');
+.phowmaButton {
+  white-space: normal;
+}
+.phowma_headline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+.jumbotron {
+   background: rgba(233,236,239, 0.5) !important;
+}
+.phowma_dropdown {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+

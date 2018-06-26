@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
 import Routes from './Routes';
@@ -29,6 +28,7 @@ class App extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <RouteNavItem href="/">Home</RouteNavItem>
+              <RouteNavItem href="/registration">Registration</RouteNavItem>
             </Nav>
           </Collapse>
         </Navbar>
