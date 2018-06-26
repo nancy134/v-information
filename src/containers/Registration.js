@@ -53,7 +53,11 @@ export default class Race extends Component {
         break;
       }
     }
-    window.open(url, "_blank")
+    if (url) {
+      window.open(url, "_blank")
+    } else {
+      this.toggle();
+    }
   }
 
   select(event){

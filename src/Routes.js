@@ -7,4 +7,5 @@ export default () =>
   <Switch>
     <Route path="/" exact component={Home} />
     <Route path="/registration" exact component={Registration} />
+    <Route path="/registration/:id" exact component={Registration} />
   </Switch>;
