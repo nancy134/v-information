@@ -4,8 +4,6 @@ import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
 import Routes from './Routes';
 import RouteNavItem from './components/RouteNavItem';
 
-import { Button } from 'reactstrap';
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -27,7 +25,6 @@ class App extends Component {
           <NavbarToggler onClick={this.toggle} className="mr-2"/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <RouteNavItem href="/">Home</RouteNavItem>
               <RouteNavItem href="/registration">Registration</RouteNavItem>
             </Nav>
           </Collapse>
