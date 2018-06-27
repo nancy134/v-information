@@ -21,6 +21,18 @@ export default class Race extends Component {
   }
 
   componentDidMount(){
+    var metas = document.getElementsByTagName('meta');
+    for (var i = 0; i< metas.length; i++)
+    {
+      for (var j =0; j < metas[i].attributes.length; j++){
+        if (metas[i].attributes[j].name === "property") {
+          if (metas[i].attributes[j].value === "phowma:state"){
+            this.state.ipState = metas[i].attributes[1].value;
+          }
+        }
+      }
+    }
+    
     States.search("min", (states) => {
       var ip_state = null;
       var current_state = null;
@@ -70,9 +82,9 @@ export default class Race extends Component {
     var items = []
     var prompt = "";
     if (this.state.currentState){
-      prompt = this.state.currentState;
+      prompt = "I live in "+this.state.currentState;
     } else {
-      prompt = "Select your state";
+      prompt = "I live in...";
     }
     if (this.state.states) {
       this.state.states.forEach((state, i) => {
