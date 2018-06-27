@@ -6,8 +6,9 @@ import { Container, Row, Col } from 'reactstrap';
 import { Jumbotron } from 'reactstrap';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import States from '../actions/States';
+import PropTypes from 'prop-types';
 
-export default class Race extends Component {
+export default class Registration extends Component {
   constructor(props) {
     super(props)
     this.toggle = this.toggle.bind(this);
@@ -61,6 +62,7 @@ export default class Race extends Component {
     var url = "";
     for (var i = 0; i < this.state.states.length; i++){
       if (this.state.currentState === this.state.states[i].name){
+        this.context.mixpanel.track(this.state.states[i].name); 
         url = this.state.states[i].registered;
         break;
       }
@@ -149,4 +151,7 @@ export default class Race extends Component {
     ]);
   }
   }
+}
+Registration.contextTypes = {
+  mixpanel: PropTypes.object.isRequired
 }
