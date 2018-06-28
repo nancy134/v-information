@@ -22,7 +22,7 @@ app.get('/', function(request, response){
         return console.log(err);
       }
       data = data.replace(/\$PAGE_TITLE/g, 'Home');
-      data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information for voters');
+      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information for voters');
       data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
       data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
       data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/');
@@ -45,7 +45,7 @@ app.get('/registration', function(request, response){
         return console.log(err);
       }
       data = data.replace(/\$PAGE_TITLE/g, 'Check your voter registration');
-      data = data.replace(/\$PAGE_DESCRIPTION/g, 'Check your voter registration');
+      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Supreme Court says states can remove voters who skip elections, ignore warnings');
       data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
       data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
       data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/registration');
@@ -71,7 +71,7 @@ app.get('/registration/*', function(request, response){
         return console.log(err);
       }
       data = data.replace(/\$PAGE_TITLE/g, 'Check your voter registration');
-      data = data.replace(/\$PAGE_DESCRIPTION/g, 'Check your voter registration');
+      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Supreme Court says states can remove voters who skip elections, ignore warnings');
       data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
       data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
       data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/registration');
