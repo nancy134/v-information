@@ -22,6 +22,7 @@ export default class Registration extends Component {
   }
 
   componentDidMount(){
+    if (!this.state.ipState){
     var metas = document.getElementsByTagName('meta');
     for (var i = 0; i< metas.length; i++)
     {
@@ -33,7 +34,7 @@ export default class Registration extends Component {
         }
       }
     }
-    
+    } 
     States.search("min", (states) => {
       var ip_state = null;
       var current_state = null;
