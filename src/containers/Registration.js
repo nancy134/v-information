@@ -96,7 +96,7 @@ export default class Registration extends Component {
         );
       });
       return [
-        <DropdownToggle caret>
+        <DropdownToggle caret className="phowma_dropdowntoggle">
           {prompt} 
         </DropdownToggle>,
         <DropdownMenu className="phowma_dropdown">
@@ -117,36 +117,49 @@ export default class Registration extends Component {
     ];
   }
 
+  renderButton2() {
+    var text = "Go to the Official Illinois Election Authority Website";
+
+
+    if (this.state.currentState) {
+      text = "Go to official " + this.state.currentState + " voting website";
+    } else {
+      text = "Go to official voting website";
+    }
+    return [
+      <Button size="lg" color="primary" className="phowmaButton" onClick={() => {this.onCheckRegistration()}}>{text}</Button>
+    ];
+  }
+
+
   render() {
     if (!this.state.states){
       return ([<p>Loading...</p>]);
     }else{
     return ([
     <Container>
-      <Row>
-        <Col md={{size: 12}} className="mt-5">
-          <Alert color="danger">
-            <h4 className="text-center phowma_headline"><a href="https://www.nytimes.com/2018/06/11/us/politics/supreme-court-upholds-ohios-purge-of-voting-rolls.html" className="alert-link" target="_blank">Supreme Court Upholds Ohio’s Purge of Voting Rolls</a></h4>
-          </Alert>
-        </Col>
-      </Row>
       <Jumbotron>
-          <h2 className="text-center">Check your voter registration now!</h2>
-          <Row className="m-3">
+        <h2 className="text-center">Check your voter registration now!</h2>
+        <Row className="m-3">
           <Col md={{size: 6, offset: 3}} className="text-center">
-
-          <ButtonDropdown size="lg" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+            <ButtonDropdown size="lg" isOpen={this.state.dropdownOpen} toggle={this.toggle} >
             {this.renderStates()}
-          </ButtonDropdown>
+            </ButtonDropdown>
           </Col>
-          </Row>
-          <Row className="m-3">
+        </Row>
+        <Row className="m-3">
           <Col md={{size: 6, offset: 3}} className="text-center">
-
-          {this.renderButton()}
-          <p>(Will open in new tab)</p>
+            {this.renderButton()}
+            <p>(Will open in new tab)</p>
           </Col>
-          </Row>
+        </Row>
+        <Row className="m-3">
+          <Col md={{size: 6, offset: 3}} className="text-center">
+            {this.renderButton2()}
+            <p>(Will open in new tab)</p>
+          </Col>
+        </Row>
+
       </Jumbotron>
     </Container>
     ]);

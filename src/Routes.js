@@ -7,7 +7,9 @@ import Race from './containers/Race';
 export default () =>
   <Switch>
     <Route path="/" exact component={Registration} />
+    <Route path="/home" exact component={Home} />
     <Route path="/registration" exact component={Registration} />
     <Route path="/registration/:id" exact component={Registration} />
     <Route path="/race/:state/:position/:id" exact component={Race} />
+    <Route path="/race" exact component={Race} />
   </Switch>;

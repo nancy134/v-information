@@ -25,7 +25,8 @@ class App extends Component {
           <NavbarToggler onClick={this.toggle} className="mr-2"/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <RouteNavItem href="/registration">Registration</RouteNavItem>
+              <RouteNavItem href="/registration">Voting</RouteNavItem>
+              <RouteNavItem href="/race">Elections</RouteNavItem>
             </Nav>
           </Collapse>
         </Navbar>

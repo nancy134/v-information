@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic');
 .phowmaButton {
-  white-space: normal;
+  width: 100%;
 }
 .phowma_headline {
   font-family: 'Playfair Display', serif;
@@ -14,4 +14,3 @@
   max-height: 400px;
   overflow-x: hidden;
 }
-
