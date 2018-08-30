@@ -27,6 +27,15 @@ function show(id, cb){
     .then(cb);
 }
 
+function byState(state_id,cb){
+  var url = 'http://www.voter-information.com/api/api/v1/districts?state_id='+state_id;
+  return fetch(url, {
+    accept: 'application/json',
+  }).then(checkStatus)
+    .then(parseJSON)
+    .then(cb);
+}
+
 function checkStatus(response){
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -42,6 +51,6 @@ function parseJSON(response){
   return response.json();
 }
 
-const Districts = {search, searchFull, show};
+const Districts = {search, searchFull, show, byState};
 export default Districts;
 

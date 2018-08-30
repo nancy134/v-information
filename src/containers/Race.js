@@ -6,22 +6,58 @@ import TweetEmbed from 'react-tweet-embed';
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-places-autocomplete';
 import Districts from '../actions/Districts';
 import Campaigns from '../actions/Campaigns';
+import States from '../actions/States';
+import { Form, FormGroup, Input } from 'reactstrap';
 
 export default class Race extends Component {
   constructor(props) {
     super(props)
-
+    console.log(this.props.location.search);
+    const params = new URLSearchParams(props.location.search);
+    const districtId = params.get('district');
     this.state = {
       state: props.match.params.state,
       position: props.match.params.position,
       id: props.match.params.id,
       address: '',
+      districtId: districtId,
       district: null,
       demCandidate: null,
-      repCandidate: null
+      repCandidate: null,
+      showDistrictSelector: false,
+      stateOptions: null,
+      selectedState: 0,
+      stateDisabled: true,
+      districtOptions: null,
+      selectedDistrict: 0,
+      districtDisabled: true 
     }
     this.onFindDistrict = this.onFindDistrict.bind(this);
+    this.handleStateChange = this.handleStateChange.bind(this);
+    this.setCampaign = this.setCampaign.bind(this);
   }
+
+  componentDidMount() {
+    var stateOptions = [];
+    States.search("list",(states) => {
+      stateOptions.push(<option value={0}>Select State</option>);
+      for (let i=0; i<states.length; i++){
+        stateOptions.push(<option value={states[i].id}>{states[i].name}</option>);
+      }
+      this.setState({
+        stateOptions: stateOptions,
+        stateDisabled: false 
+      });
+    });
+    if (this.state.districtId){
+      Districts.show(this.state.districtId, (district) => {
+        Campaigns.index("q[election_office_district_id_eq]="+district.id, (campaigns) => {
+          this.setCampaign(district, campaigns);
+        });
+      });
+    }
+  }
+
   handleChange = address => {
     this.setState({ address });
   }
@@ -30,26 +66,32 @@ export default class Race extends Component {
     console.log("handleSelect: address: "+address);
     this.setState({address: address});
   }
+
+  handleStateChange(e) {
+    this.setState({
+      selectedState: e.target.value
+    });
+    Districts.byState(e.target.value, (districts) => {
+      var districtOptions = [];
+      districtOptions.push(<option value={99}>Select District</option>);
+      for (var i=0; i<districts.length; i++){
+        console.log(districts[i].name);
+        districtOptions.push(<option value={districts[i].id}>{districts[i].name}</option>);
+   
+      }
+      this.setState({
+        districtOptions: districtOptions,
+        districtDisabled: false});
+    });
+  }
+
+  onShowDistrictSelector(){
+    this.setState({showDistrictSelector: true});
+  }
   onFindDistrict () {
     Districts.searchFull(this.state.address, (district) => {
-      console.log("district: "+JSON.stringify(district));
-      console.log("q[election_office_district_id_eq]="+district.id);
       Campaigns.index("q[election_office_district_id_eq]="+district.id, (campaigns) => {
-        console.log("campaigns: "+JSON.stringify(campaigns));
-        var demCandidate = null;
-        var repCandidate = null;      
-        for (var i=0; i<campaigns.length; i++){
-          if (campaigns[i].politician.party == 'democrat'){
-            demCandidate = campaigns[i];
-          } else if (campaigns[i].politician.party == 'republican'){
-            repCandidate = campaigns[i];
-          }
-        }
-        this.setState({
-          district: district,
-          demCandidate: demCandidate,
-          repCandidate: repCandidate
-        });
+        this.setCampaign(district, campaigns);
       });
     }).catch(error =>
       console.log("This is the error: "+error)
@@ -60,11 +102,29 @@ export default class Race extends Component {
     //  .then(latLng => console.log('Success', latLng))
     //  .catch(error => console.error('Error', error));
   }
+  setCampaign(district, campaigns) {
+    console.log("campaigns: "+JSON.stringify(campaigns));
+    var demCandidate = null;
+    var repCandidate = null;
+    for (var i=0; i<campaigns.length; i++){
+      if (campaigns[i].politician.party == 'democrat'){
+        demCandidate = campaigns[i];
+      } else if (campaigns[i].politician.party == 'republican'){
+        repCandidate = campaigns[i];
+      }
+    }
+    this.setState({
+      district: district,
+      demCandidate: demCandidate,
+      repCandidate: repCandidate
+    });
+  }
   renderAddressBar() {
     return (
       <Jumbotron>
+      <h3>Find out what the candidates are saying in your district</h3>
       <Row>
-      <Col md={9}>
+      <Col md={10}>
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
@@ -104,12 +164,30 @@ export default class Race extends Component {
         )}
       </PlacesAutocomplete>
       </Col>
-      <Col md={3}>
-        <Button onClick={() => {this.onFindDistrict()}}>Find district</Button>
+      <Col sm={2}>
+      <Button onClick={() => {this.onFindDistrict()}}>Find Candidates</Button>
       </Col>
       </Row>
+      <Button color="link"  onClick={() => {this.onShowDistrictSelector()}}>I would rather select my district</Button>
+       {this.renderDistrictSelector()}
       </Jumbotron>
     );
+  }
+  renderDistrictSelector() {
+    if (this.state.showDistrictSelector){
+    return ([
+      <Form inline>
+   
+      <Input type="select" name="state" disabled={(this.state.stateDisabled)? "disabled" : ""} onChange={this.handleStateChange}>
+        {this.state.stateOptions}
+      </Input>
+      <Input type="select" name="district" disabled={(this.state.districtDisabled)? "disabled" : ""}>
+        {this.state.districtOptions}
+      </Input>
+      <Button>Find Candidates</Button>
+      </Form>
+    ]);
+    }
   }
   renderDemCandidatePosts() {
     if (this.state.demCandidate.politician.posts.length == 1) {
@@ -134,8 +212,33 @@ export default class Race extends Component {
       }
     }
   }
+  renderDemCandidateName() {
+    if (this.state.demCandidate){
+      return([
+        <h3>{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
+      ]);
+    } else {
+      return([
+        <h3>No Democratic candidate</h3>
+      ]);
+    }
+  }
+  renderRepCandidateName() {
+    if (this.state.repCandidate){
+      return([
+        <h3>{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
+      ]);
+    } else {
+      return([
+        <h3>No Republican candidate</h3>
+      ]);
+    }
+  }
+
   renderRepCandidatePosts() {
-    if (this.state.repCandidate.politician.posts.length == 1) {
+    if (!this.state.repCandidate){
+      return ([]);
+    } else if (this.state.repCandidate.politician.posts.length == 1) {
       return ([
         <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id} />
       ]);
@@ -157,29 +260,29 @@ export default class Race extends Component {
       }
     }
 
-  }
+  } 
   renderCandidates() {
-    if (!this.state.district || !this.state.demCandidate || !this.state.repCandidate){
-    return ([
-      <p>Searching candidates...</p>
-    ]);
+    if (!this.state.district){
+      return ([
+        <p></p>
+      ]);
     } else {
     return ([
-      <Row>
-        <Col md={{size: 12}} >
-          <Alert color="primary">
-            <h2 className="text-center">Candidates for {this.state.district.state.name} {this.state.district.name} Congressional district</h2>
-          </Alert>
-        </Col>
-      </Row>,
       <Jumbotron>
         <Row>
+          <Col md={{size: 12}} >
+            <Alert color="primary">
+              <h2 className="text-center">Candidates for {this.state.district.state.name} {this.state.district.name} Congressional district</h2>
+            </Alert>
+          </Col>
+        </Row>
+        <Row>
           <Col>
-            <h3>{this.state.demCandidate.politician.party} {this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name}</h3>
+            {this.renderDemCandidateName()}
             {this.renderDemCandidatePosts()}
           </Col>
           <Col>
-            <h3>{this.state.repCandidate.politician.party} {this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name}</h3>
+            {this.renderRepCandidateName()}
             {this.renderRepCandidatePosts()}
           </Col>
         </Row>
