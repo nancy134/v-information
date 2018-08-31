@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
+import { Jumbotron } from 'reactstrap';
 import Routes from './Routes';
 import RouteNavItem from './components/RouteNavItem';
 
@@ -20,13 +21,15 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar expand="md" className="navbar-light bg-light">
+        <Navbar expand="md" color="dark" dark>
           <NavbarBrand href="/">Voter-Information</NavbarBrand>
           <NavbarToggler onClick={this.toggle} className="mr-2"/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <RouteNavItem href="/voting">Voting</RouteNavItem>
-              <RouteNavItem href="/race">Elections</RouteNavItem>
+              <RouteNavItem href="/race">House</RouteNavItem>
+              <RouteNavItem href="/senate">Senate</RouteNavItem>
+              <RouteNavItem href="/governor">Governors</RouteNavItem>
+              <RouteNavItem href="/registration">Voter</RouteNavItem>
             </Nav>
           </Collapse>
         </Navbar>

@@ -7,6 +7,8 @@ import { Jumbotron } from 'reactstrap';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import States from '../actions/States';
 import PropTypes from 'prop-types';
+import { Carousel, CarouselItem } from 'reactstrap';
+import { Media } from 'reactstrap';
 
 export default class Registration extends Component {
   constructor(props) {
@@ -138,7 +140,7 @@ export default class Registration extends Component {
     }else{
     return ([
     <Container>
-      <Jumbotron>
+      <Jumbotron className="pt-1">
         <h2 className="text-center">Check your voter registration now!</h2>
         <Row className="m-3">
           <Col md={{size: 6, offset: 3}} className="text-center">

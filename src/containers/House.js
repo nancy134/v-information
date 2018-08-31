@@ -9,7 +9,7 @@ import Campaigns from '../actions/Campaigns';
 import States from '../actions/States';
 import { Form, FormGroup, Input } from 'reactstrap';
 
-export default class Race extends Component {
+export default class House extends Component {
   constructor(props) {
     super(props)
     console.log(this.props.location.search);
@@ -122,7 +122,8 @@ export default class Race extends Component {
   renderAddressBar() {
     return (
       <Jumbotron>
-      <h3>Find out what the candidates are saying in your district</h3>
+      <p>All members of the House of Representatives are up for re-election in 2018</p>
+      <h3>Find out what the candidates are saying in YOUR district</h3>
       <Row>
       <Col md={10}>
       <PlacesAutocomplete
@@ -134,7 +135,7 @@ export default class Race extends Component {
           <div>
             <input
               {...getInputProps({
-                placeholder: 'Enter home address ...',
+                placeholder: 'Enter your home address...',
                 className: 'form-control location-search-input',
               })}
             />
@@ -168,7 +169,7 @@ export default class Race extends Component {
       <Button onClick={() => {this.onFindDistrict()}}>Find Candidates</Button>
       </Col>
       </Row>
-      <Button color="link"  onClick={() => {this.onShowDistrictSelector()}}>I would rather select my district</Button>
+      <Button color="link"  onClick={() => {this.onShowDistrictSelector()}}>I already know my congressional district</Button>
        {this.renderDistrictSelector()}
       </Jumbotron>
     );
@@ -273,6 +274,7 @@ export default class Race extends Component {
           <Col md={{size: 12}} >
             <Alert color="primary">
               <h2 className="text-center">Candidates for {this.state.district.state.name} {this.state.district.name} Congressional district</h2>
+              <div className="text-center"><Button color="link">Your Senator is also up for re-election</Button></div>
             </Alert>
           </Col>
         </Row>
