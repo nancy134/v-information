@@ -32,7 +32,7 @@ app.get('/', function(request, response){
     });
   });
 });
-app.get('/registration', function(request, response){
+app.get('/voter', function(request, response){
   console.log('app.get(/registration)');
   url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
@@ -58,7 +58,7 @@ app.get('/registration', function(request, response){
 });
 
 
-app.get('/registration/*', function(request, response){
+app.get('/voter/*', function(request, response){
   console.log('app.get(/registration/*)');
   url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {

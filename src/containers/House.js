@@ -15,10 +15,8 @@ export default class House extends Component {
     console.log(this.props.location.search);
     const params = new URLSearchParams(props.location.search);
     const districtId = params.get('district');
+    const stateId = params.get('state');
     this.state = {
-      state: props.match.params.state,
-      position: props.match.params.position,
-      id: props.match.params.id,
       address: '',
       districtId: districtId,
       district: null,
@@ -28,6 +26,8 @@ export default class House extends Component {
       stateOptions: null,
       selectedState: 0,
       stateDisabled: true,
+      stateId: stateId,
+      senateElection: false,
       districtOptions: null,
       selectedDistrict: 0,
       districtDisabled: true 
@@ -39,14 +39,32 @@ export default class House extends Component {
 
   componentDidMount() {
     var stateOptions = [];
+    var districtOptions = [];
+    var senateElection = false;
     States.search("list",(states) => {
       stateOptions.push(<option value={0}>Select State</option>);
       for (let i=0; i<states.length; i++){
-        stateOptions.push(<option value={states[i].id}>{states[i].name}</option>);
+        if (states[i].id == this.state.stateId) {
+          if (states[i].senate_election == true) senateElection = true;
+          stateOptions.push(<option value={states[i].id} selected>{states[i].name}</option>);
+          for (let j=0; j<states[i].districts.length; j++){
+            if (states[i].districts[j].id == this.state.districtId){
+              districtOptions.push(<option value={states[i].districts[j].id} selected>{states[i].districts[j].name}</option>);
+            } else {
+              districtOptions.push(<option value={states[i].districts[j].id}>{states[i].districts[j].name}</option>);
+            }
+          }
+        } else {
+          stateOptions.push(<option value={states[i].id}>{states[i].name}</option>);
+        }
       }
       this.setState({
         stateOptions: stateOptions,
-        stateDisabled: false 
+        districtOptions: districtOptions,
+        districtDisabled: false,
+        stateDisabled: false,
+        districtDisabled: false,
+        senateElection: senateElection
       });
     });
     if (this.state.districtId){
@@ -68,6 +86,7 @@ export default class House extends Component {
   }
 
   handleStateChange(e) {
+    console.log("e: "+e);
     this.setState({
       selectedState: e.target.value
     });
@@ -85,6 +104,9 @@ export default class House extends Component {
     });
   }
 
+  onSenate(){
+    window.location.href = "http://server.phowma.com/senate?state="+this.state.district.state.id;
+  }
   onShowDistrictSelector(){
     this.setState({showDistrictSelector: true});
   }
@@ -274,7 +296,7 @@ export default class House extends Component {
           <Col md={{size: 12}} >
             <Alert color="primary">
               <h2 className="text-center">Candidates for {this.state.district.state.name} {this.state.district.name} Congressional district</h2>
-              <div className="text-center"><Button color="link">Your Senator is also up for re-election</Button></div>
+              {this.renderSenateLink()}
             </Alert>
           </Col>
         </Row>
@@ -292,6 +314,14 @@ export default class House extends Component {
     ]);
     }
   }
+
+  renderSenateLink() {
+    return([
+      <div className="text-center"><Button color="link"  onClick={() => {this.onSenate()}}>Your Senator is also up for re-election</Button></div>
+    ]);
+
+  }
+
   render() {
     return ([
       <Container>
