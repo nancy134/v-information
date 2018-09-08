@@ -24,7 +24,8 @@ export default class Voter extends Component {
       states: null,
       stateOptions: null,
       selectedStateIndex: -1,
-      campaigns: null
+      campaigns: null,
+      districts: null
     };
   }
 
@@ -99,7 +100,15 @@ export default class Voter extends Component {
     url = url.toLowerCase();
     window.open(url,"_blank");
   } 
-
+  onSenateSocialMedia(){
+    window.location.href = "http://server.phowma.com/senate?state="+this.state.states[this.state.selectedStateIndex].id;
+  }
+  onHouse(e){
+    var districtIndex = parseInt(e.target.value);
+    var url = "http://server.phowma.com/house?district="+this.state.districts[districtIndex].id+"&state="+this.state.districts[districtIndex].state.id;
+    console.log("url: "+url);
+    window.location.href = url;
+  }
   renderCheckRegistration(){
     var text = "Check your voter registration";
     if (this.state.selectedStateIndex >= 0) {
@@ -171,7 +180,7 @@ export default class Voter extends Component {
         </Col>
         </Row>
         <div className="text-center">
-          <Button color="link">Check out what the candidates are saying on social media</Button>
+          <Button color="link" onClick={() => {this.onSenateSocialMedia()}}>Check out what the candidates are saying on social media</Button>
         </div>
       </Jumbotron>
 
@@ -190,8 +199,6 @@ export default class Voter extends Component {
         var repCandidate = null;
         for (var j=0; j<this.state.campaigns.length; j++){
           if (this.state.campaigns[j].election.office.position == "representative" && this.state.campaigns[j].election.office.district.id == this.state.districts[i].id){
-            console.log("got here for district id: "+this.state.districts[i].id);
-            console.log("party: "+this.state.campaigns[j].politician.party);
             if (this.state.campaigns[j].politician.party == 'democrat'){
               demCandidate = this.state.campaigns[j].politician;
             }else if (this.state.campaigns[j].politician.party == 'republican'){
@@ -199,11 +206,13 @@ export default class Voter extends Component {
             }
           }
         }
-        if (demCandidate) console.log("have dem candidate");
-        if (repCandidate) console.log("have rep candidate");
         if (demCandidate && repCandidate){
-          console.log("have dem and rep candidate");
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td></tr>);
+          console.log("i for districts: "+i);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>Social Media</Button></td></tr>);
+        } else if (demCandidate && !repCandidate){
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No Republican candidate</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
+        } else if (!demCandidate && repCandidate){
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No Democratic candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media></Button></td></tr>);
         }
       }
       return([
@@ -215,6 +224,8 @@ export default class Voter extends Component {
               <th>District</th>
               <th>Democrat</th>
               <th>Republican</th>
+              <th>Other</th>
+              <th>Social Media</th>
             </tr>
           </thead>
           <tbody>
@@ -249,29 +260,32 @@ export default class Voter extends Component {
             {this.renderStateSelector()}
           </Col>
         </Row>
-      <CardDeck>
-        <Card>
-          <CardBody>
-            {this.renderCheckRegistration()}
-          </CardBody>
-        </Card>
-        <Card>
-          <CardBody>
-            {this.renderOfficialWebsite()}
-          </CardBody>
-        </Card>
-        <Card>
-          <CardBody>
-            <div className="text-center">
-              <p>More websites...</p>
-              {this.renderWebsites()}
-            </div>
-          </CardBody>
-        </Card>
-      </CardDeck>
       </Jumbotron>
       {this.renderSenateCandidates()}
       {this.renderCongressionalCandidates()}
+      <Jumbotron>
+        <h3 className="text-center">Voter Information</h3>
+        <CardDeck>
+          <Card>
+            <CardBody>
+              {this.renderCheckRegistration()}
+            </CardBody>
+          </Card>
+          <Card>
+            <CardBody>
+              {this.renderOfficialWebsite()}
+            </CardBody>
+          </Card>
+          <Card>
+            <CardBody>
+              <div className="text-center">
+                <p>More websites...</p>
+                {this.renderWebsites()}
+              </div>
+            </CardBody>
+          </Card>
+        </CardDeck>
+      </Jumbotron>
     </Container>
     ]);
   }

@@ -15,78 +15,106 @@ export default class Senate extends Component {
     this.state = {
       stateOptions: null,
       stateId: stateId,
-      state: null,
+      states: null,
+      stateIndex: -1,
       demCandidate: null,
       repCandidate: null
     }
-    this.setCampaign = this.setCampaign.bind(this);
+    this.handleStateChange = this.handleStateChange.bind(this);
   }
 
   componentDidMount() {
     var stateOptions = [];
-
-    States.search("list", (states) => {
-      stateOptions.push(<option value={0}>Select State</option>);
-      for (let i=0; i<states.length; i++) {
-        if (states[i].id == this.state.stateId)
-          stateOptions.push(<option value={states[i].id} selected>{states[i].name}</option>);
-        else
-          stateOptions.push(<option value={states[i].id}>{states[i].name}</option>);
-      }
-      this.setState({
-        stateOptions: stateOptions
-      });
-    });
-    console.log("this.state.stateId: "+this.state.stateId);
-    if (this.state.stateId){
-      var query = "q[election_office_state_id_eq]="+
-        this.state.stateId+
-        "&q[election_office_position_eq]=0";
-      Campaigns.index(query, (campaigns) => {
-        var state = null;
-        console.log("campaigns.length: "+campaigns.length);
-        if (campaigns.length > 0){
-          state = campaigns[0].election.office.state;
-        }
-        this.setCampaign(state,campaigns);
-      });
-    }
-  }
-
-  setCampaign(state, campaigns){
-    console.log("state: "+JSON.stringify(state));
+    var stateIndex = 0;
+    var statesList = [];
     var demCandidate = null;
     var repCandidate = null;
-
-    for (var i=0; i<campaigns.length; i++){
-      if (campaigns[i].politician.party == 'democrat'){
-        demCandidate = campaigns[i];
-      } else if (campaigns[i].politician.party == 'republican'){
-        repCandidate = campaigns[i];
+    States.search("list", (states) => {
+      statesList = states;
+      stateOptions.push(<option value={-1}>Select State</option>);
+      for (let i=0; i<states.length; i++) {
+        if (states[i].id == this.state.stateId){
+          stateOptions.push(<option value={i} selected>{states[i].name}</option>);
+          stateIndex = i;
+        } else{ 
+          stateOptions.push(<option value={i}>{states[i].name}</option>);
+        }
       }
-    }
-    console.log("state: "+state);
-    this.setState({
-      state: state,
-      demCandidate: demCandidate,
-      repCandidate: repCandidate
+
+      if (this.state.stateId){
+        var query = "q[election_office_state_id_eq]="+
+          this.state.stateId+
+          "&q[election_office_position_eq]=0";
+        Campaigns.index(query, (campaigns) => {
+          var demCandidate = null;
+          var repCandidate = null;
+
+          for (var i=0; i<campaigns.length; i++){
+            if (campaigns[i].politician.party == 'democrat'){
+              demCandidate = campaigns[i];
+            } else if (campaigns[i].politician.party == 'republican'){
+              repCandidate = campaigns[i];
+            }
+          }
+          this.setState({
+            stateOptions: stateOptions,
+            states: statesList,
+            stateIndex: stateIndex, 
+            demCandidate: demCandidate,
+            repCandidate: repCandidate
+          });
+        });
+      } else {
+        console.log("stateIndex: "+stateIndex);
+        console.log("stateOptins: "+stateOptions);
+        console.log("statesList: "+statesList);
+        this.setState({
+          stateOptions: stateOptions,
+          states: statesList,
+          stateIndex: stateIndex
+        });
+      }
     });
   }
 
-  renderStateSelector() {
-    return ([
-      <Jumbotron>
-        <h3>Select your state to see if your sentor is up from re-election</h3>
-        <Form inline>
-          <Input type="select" name="state">
-            {this.state.stateOptions}
-          </Input> 
-          <Button>Find Candidates</Button>
-        </Form>
-      </Jumbotron>
-    ]);  
+  handleStateChange(e){
+    var stateIndex = e.target.value;
+    var query = "q[election_office_state_id_eq]="+
+      this.state.states[stateIndex].id+
+      "&q[election_office_position_eq]=0";
+
+    Campaigns.index(query, (campaigns) => {
+      console.log("campaigns: "+JSON.stringify(campaigns));
+      var demCandidate = null;
+      var repCandidate = null;
+
+      for (var i=0; i<campaigns.length; i++){
+        if (campaigns[i].politician.party == 'democrat'){
+          demCandidate = campaigns[i];
+        } else if (campaigns[i].politician.party == 'republican'){
+          repCandidate = campaigns[i];
+        }
+      }
+      console.log("demCandidate: "+demCandidate);
+      console.log("repCandidate: "+repCandidate);
+      this.setState({
+        stateIndex: stateIndex,
+        campaigns: campaigns,
+        demCandidate: demCandidate,
+        repCandidate: repCandidate
+      });
+    });
+  }
+  renderStateSelector2() {
+    console.log("renderStateSelector2()");
+    return([
+      <Input type="select" name="state" onChange={this.handleStateChange}>
+        {this.state.stateOptions}
+      </Input>
+    ]);
   }
   renderDemCandidateName() {
+    console.log("renderDemCandidateName()");
     if (this.state.demCandidate){
       return([
         <h3>{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
@@ -98,6 +126,7 @@ export default class Senate extends Component {
     }
   }
   renderRepCandidateName() {
+    console.log("renderRepCandidateName()");
     if (this.state.repCandidate){
       return([
         <h3>{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
@@ -110,6 +139,11 @@ export default class Senate extends Component {
   }
 
   renderDemCandidatePosts() {
+    console.log("RenderDemCandidatePosts()");
+    console.log("this.state.demCandidate: "+JSON.stringify(this.state.demCandidate));
+    if (!this.state.demCandidate){
+      return([]);
+    } else {
     console.log("social_id: "+this.state.demCandidate.politician.posts[0].social_id);
     if (this.state.demCandidate.politician.posts.length == 1) {
       return ([
@@ -132,9 +166,11 @@ export default class Senate extends Component {
         ]);
       }
     }
+    }
   }
 
   renderRepCandidatePosts() {
+    console.log("RenderRepCandidatePosts()");
     if (!this.state.repCandidate){
       return ([]);
     } else if (this.state.repCandidate.politician.posts.length == 1) {
@@ -159,22 +195,34 @@ export default class Senate extends Component {
       }
     }
 
+  }
+  renderTitle(){
+    console.log("renderTitle()");
+    var title = "Select state to find candidates for Senate";
+    if (this.state.stateIndex > 0){
+      title = this.state.states[this.state.stateIndex].name + " candidates for Senate";
+    }
+    return([
+          <Alert color="primary">
+            <h2 className="text-center">{title}</h2>
+            <Row>
+            <Col md={{size: 4, offset: 4}} className="text-center">
+            <div className="text-center">
+              {this.renderStateSelector2()}
+            </div>
+            </Col>
+            </Row>
+          </Alert>
+    ]);
   } 
   renderCandidates(){
-    console.log("this.state.state: "+this.state.state);
-    if (!this.state.state){
+    console.log("renderCandidates()");
+    console.log("this.state.stateIndex: "+this.state.stateIndex);
+    if (this.state.stateIndex == -1){
       return([
       ]);
     } else {
       return([
-      <Jumbotron>
-        <Row>
-          <Col md={{size:12}}>
-            <Alert color="primary">
-              <h2 className="text-center">{this.state.state.name} candidates for Senate</h2>
-            </Alert>
-          </Col>
-        </Row>
         <Row>
           <Col>
             {this.renderDemCandidateName()}
@@ -185,16 +233,18 @@ export default class Senate extends Component {
             {this.renderRepCandidatePosts()}
           </Col>
         </Row>
-      </Jumbotron>
       ]);
     }
   }
 
   render() {
+    console.log("render()");
     return ([
       <Container>
-        {this.renderStateSelector()}
-        {this.renderCandidates()}
+        <Jumbotron>
+          {this.renderTitle()}
+          {this.renderCandidates()}
+        </Jumbotron>
       </Container>
     ]);
   }
