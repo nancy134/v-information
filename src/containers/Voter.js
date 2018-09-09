@@ -161,7 +161,7 @@ export default class Voter extends Component {
     }
     if (demCandidate && repCandidate){
     return([
-      <Jumbotron>
+      <Jumbotron className="pt-2 pb-2">
         <h3 className="text-center">US Senate Candidates</h3>
         <Row>
         <Col>
@@ -210,13 +210,13 @@ export default class Voter extends Component {
           console.log("i for districts: "+i);
           rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>Social Media</Button></td></tr>);
         } else if (demCandidate && !repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No Republican candidate</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
         } else if (!demCandidate && repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No Democratic candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media></Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
         }
       }
       return([
-      <Jumbotron>
+      <Jumbotron className="pt-2 pb-2">
         <h3 className="text-center">US Congressional Candidates</h3>
         <Table>
           <thead>
@@ -252,7 +252,7 @@ export default class Voter extends Component {
     }else{
     return ([
     <Container>
-      <Jumbotron>
+      <Jumbotron className="pt-2 pb-2">
         <h2 className="text-center">2018 Midterm Election Information</h2>
         <h4 className="text-center">Select your state</h4>
         <Row className="m-3">
@@ -263,7 +263,7 @@ export default class Voter extends Component {
       </Jumbotron>
       {this.renderSenateCandidates()}
       {this.renderCongressionalCandidates()}
-      <Jumbotron>
+      <Jumbotron className="pt-2">
         <h3 className="text-center">Voter Information</h3>
         <CardDeck>
           <Card>

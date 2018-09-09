@@ -12,7 +12,6 @@ import { Form, FormGroup, Input } from 'reactstrap';
 export default class House extends Component {
   constructor(props) {
     super(props)
-    console.log(this.props.location.search);
     const params = new URLSearchParams(props.location.search);
     const districtId = params.get('district');
     const stateId = params.get('state');
@@ -81,12 +80,10 @@ export default class House extends Component {
   }
 
   handleSelect = address => {
-    console.log("handleSelect: address: "+address);
     this.setState({address: address});
   }
 
   handleStateChange(e) {
-    console.log("e: "+e);
     this.setState({
       selectedState: e.target.value
     });
@@ -94,7 +91,6 @@ export default class House extends Component {
       var districtOptions = [];
       districtOptions.push(<option value={99}>Select District</option>);
       for (var i=0; i<districts.length; i++){
-        console.log(districts[i].name);
         districtOptions.push(<option value={districts[i].id}>{districts[i].name}</option>);
    
       }
@@ -125,7 +121,6 @@ export default class House extends Component {
     //  .catch(error => console.error('Error', error));
   }
   setCampaign(district, campaigns) {
-    console.log("campaigns: "+JSON.stringify(campaigns));
     var demCandidate = null;
     var repCandidate = null;
     for (var i=0; i<campaigns.length; i++){
@@ -141,11 +136,23 @@ export default class House extends Component {
       repCandidate: repCandidate
     });
   }
+  renderTitle(){
+    var text = "Find candidates in your district";
+    if (this.state.district){
+      text = "Candidates for "+this.state.district.state.name+" "+this.state.district.name+" Congressional district";
+    }
+    return([
+        <Row>
+          <Col md={{size: 12}} >
+              <h2 className="text-center">{text}</h2>
+          </Col>
+        </Row>
+    ]);
+  }
   renderAddressBar() {
     return (
-      <Jumbotron>
-      <p>All members of the House of Representatives are up for re-election in 2018</p>
-      <h3>Find out what the candidates are saying in YOUR district</h3>
+      <Alert color="primary">
+      {this.renderTitle()}
       <Row>
       <Col md={10}>
       <PlacesAutocomplete
@@ -193,7 +200,7 @@ export default class House extends Component {
       </Row>
       <Button color="link"  onClick={() => {this.onShowDistrictSelector()}}>I already know my congressional district</Button>
        {this.renderDistrictSelector()}
-      </Jumbotron>
+      </Alert>
     );
   }
   renderDistrictSelector() {
@@ -291,15 +298,7 @@ export default class House extends Component {
       ]);
     } else {
     return ([
-      <Jumbotron>
-        <Row>
-          <Col md={{size: 12}} >
-            <Alert color="primary">
-              <h2 className="text-center">Candidates for {this.state.district.state.name} {this.state.district.name} Congressional district</h2>
-              {this.renderSenateLink()}
-            </Alert>
-          </Col>
-        </Row>
+        <div>
         <Row>
           <Col>
             {this.renderDemCandidateName()}
@@ -310,7 +309,7 @@ export default class House extends Component {
             {this.renderRepCandidatePosts()}
           </Col>
         </Row>
-      </Jumbotron>
+        </div>
     ]);
     }
   }
@@ -325,8 +324,10 @@ export default class House extends Component {
   render() {
     return ([
       <Container>
-        <div>{this.renderAddressBar()}</div>
-        {this.renderCandidates()}
+        <Jumbotron>
+          <div>{this.renderAddressBar()}</div>
+          {this.renderCandidates()}
+        </Jumbotron>
       </Container>
     ]);
   }
