@@ -146,20 +146,17 @@ export default class Voter extends Component {
     ]);
   }
   renderSenateCandidates(){
-    var demCandidate = null;
-    var repCandidate = null;
+    var firstCandidate = null;
+    var secondCandidate = null;
     if (this.state.campaigns){
       for (var i=0; i<this.state.campaigns.length; i++){
         if (this.state.campaigns[i].election.office.position == 'senator'){
-          if (this.state.campaigns[i].politician.party == 'democrat'){
-            demCandidate = this.state.campaigns[i].politician;
-          } else if (this.state.campaigns[i].politician.party == 'republican') {
-            repCandidate = this.state.campaigns[i].politician;
-          }
+          if (!firstCandidate) firstCandidate = this.state.campaigns[i].politician;
+          else if (!secondCandidate) secondCandidate = this.state.campaigns[i].politician;
         }
       }
     }
-    if (demCandidate && repCandidate){
+    if (firstCandidate && secondCandidate){
     return([
       <Jumbotron className="pt-2 pb-2">
         <h3 className="text-center">US Senate Candidates</h3>
@@ -167,14 +164,14 @@ export default class Voter extends Component {
         <Col>
         <Card>
           <CardBody>
-            <CardTitle>{demCandidate.first_name} {demCandidate.last_name}</CardTitle>
+            <CardTitle>{firstCandidate.first_name} {firstCandidate.last_name} ({firstCandidate.party[0].toUpperCase()})</CardTitle>
           </CardBody>
         </Card>
         </Col>
         <Col>
         <Card>
           <CardBody>
-            <CardTitle>{repCandidate.first_name} {repCandidate.last_name}</CardTitle>
+            <CardTitle>{secondCandidate.first_name} {secondCandidate.last_name} ({secondCandidate.party[0].toUpperCase()})</CardTitle>
           </CardBody>
         </Card>
         </Col>

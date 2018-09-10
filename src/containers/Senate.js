@@ -17,12 +17,10 @@ export default class Senate extends Component {
       stateId: stateId,
       states: null,
       stateIndex: -1,
-      demCandidate: null,
-      repCandidate: null,
-      indCandidate: null,
+      firstCandidate: null,
+      secondCandidate: null,
       noCampaigns: false
     }
-    console.log("this.state.noCampaigs: "+this.state.noCampaigns);
     this.handleStateChange = this.handleStateChange.bind(this);
   }
 
@@ -30,9 +28,8 @@ export default class Senate extends Component {
     var stateOptions = [];
     var stateIndex = -1;
     var statesList = [];
-    var demCandidate = null;
-    var repCandidate = null;
-    var indCandidate = null;
+    var firstCandidate = null;
+    var secondCandidate = null;
     var noCampaigns = false;
     States.search("list", (states) => {
       statesList = states;
@@ -49,28 +46,25 @@ export default class Senate extends Component {
       if (this.state.stateId){
         var query = "q[election_office_state_id_eq]="+
           this.state.stateId+
-          "&q[election_office_position_eq]=0";
+          "&q[election_office_position_eq]=0"+
+          "&q[s]=party asc";
         Campaigns.index(query, (campaigns) => {
-          var demCandidate = null;
-          var repCandidate = null;
-          var indCandidate = null;
+          var firstCandidate = null;
+          var secondCandidate = null;
           if (campaigns.length == 0) noCampaigns = true;
-          for (var i=0; i<campaigns.length; i++){
-            if (campaigns[i].politician.party == 'democrat'){
-              demCandidate = campaigns[i];
-            } else if (campaigns[i].politician.party == 'republican'){
-              repCandidate = campaigns[i];
-            } else if (campaigns[i].politician.party == 'independent'){
-              indCandidate = campaigns[i];
-            }
+          if (campaigns.length == 1) {
+            firstCandidate = campaigns[0];
+          }
+          if (campaigns.length == 2) {
+            firstCandidate = campaigns[0];
+            secondCandidate = campaigns[1]
           }
           this.setState({
             stateOptions: stateOptions,
             states: statesList,
             stateIndex: stateIndex, 
-            demCandidate: demCandidate,
-            repCandidate: repCandidate,
-            indCandidate: indCandidate,
+            firstCandidate: firstCandidate,
+            secondCandidate: secondCandidate,
             noCampaigns: noCampaigns
           });
         });
@@ -89,29 +83,27 @@ export default class Senate extends Component {
     var stateIndex = e.target.value;
     var query = "q[election_office_state_id_eq]="+
       this.state.states[stateIndex].id+
-      "&q[election_office_position_eq]=0";
+      "&q[election_office_position_eq]=0"+
+      "&q[s]=party asc";
 
     Campaigns.index(query, (campaigns) => {
-      var demCandidate = null;
-      var repCandidate = null;
-      var indCandidate = null;
+      var firstCandidate = null;
+      var secondCandidate = null;
       var noCampaigns = false;
       if (campaigns.length == 0) noCampaigns = true;
-      for (var i=0; i<campaigns.length; i++){
-        if (campaigns[i].politician.party == 'democrat'){
-          demCandidate = campaigns[i];
-        } else if (campaigns[i].politician.party == 'republican'){
-          repCandidate = campaigns[i];
-        } else if (campaigns[i].politician.party == 'independent'){
-          indCandidate = campaigns[i];
-        }
+      if (campaigns.length == 1) {
+        firstCandidate = campaigns[0];
       }
+      if (campaigns.length == 2) {
+        firstCandidate = campaigns[0];
+        secondCandidate = campaigns[1];
+      }
+      console.log("firstCandidate: "+JSON.stringify(firstCandidate));
+      console.log("secondCandidate: "+JSON.stringify(secondCandidate));
       this.setState({
         stateIndex: stateIndex,
-        campaigns: campaigns,
-        demCandidate: demCandidate,
-        repCandidate: repCandidate,
-        indCandidate: indCandidate,
+        firstCandidate: firstCandidate,
+        secondCandidate: secondCandidate,
         noCampaigns: noCampaigns
       });
     });
@@ -123,51 +115,45 @@ export default class Senate extends Component {
       </Input>
     ]);
   }
-  renderDemCandidateName() {
-    if (this.state.demCandidate){
+  renderCandidateName(candidate){
+    console.log("candidate: "+candidate);
+    var party = "";
+    if (candidate){
+      console.log("there is a candidate");
+      if (candidate.politician.party == 'democrat'){
+        party = "(D)";
+      } else if (candidate.politician.party == 'republican'){
+        party = "(R)";
+      } else if (candidate.politician.party == 'independent'){
+        party = "(I)";
+      }
       return([
-        <h3>{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
-      ]);
-    } else if (this.state.indCandidate){ 
-      return([
-        <h3>{this.state.indCandidate.politician.first_name} {this.state.indCandidate.politician.last_name} (I)</h3>
-
+        <h3>{candidate.politician.first_name} {candidate.politician.last_name} {party}</h3>
       ]);
     } else {
+      console.log("there is not a candidate");
       return([
-        <h3>No Democratic candidate</h3>
       ]);
     }
+
   }
-  renderRepCandidateName() {
-    if (this.state.repCandidate){
-      return([
-        <h3>{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
-      ]);
-    } else {
-      return([
-        <h3>No Republican candidate</h3>
-      ]);
-    }
+  renderFirstCandidateName() {
+    console.log("this.state.firstCandidate: "+this.state.firstCandidate);
+    return this.renderCandidateName(this.state.firstCandidate);
+  }
+  renderSecondCandidateName() {
+    return this.renderCandidateName(this.state.secondCandidate);
   }
 
-  renderDemCandidatePosts() {
-    if (!this.state.demCandidate && !this.state.indCandidate){
-      return([]);
-    } else {
-    var candidate = null;
-    if (this.state.demCandidate){
-      candidate = this.state.demCandidate;
-    }else if (this.state.indCandidate){
-      candidate = this.state.indCandidate;
-    }
-
-    if (candidate.politician.posts.length == 1) {
+  renderCandidatePosts(candidate){
+    if (!candidate){
+      return ([]);
+    } else if (candidate.politician.posts.length == 1) {
       return ([
         <TweetEmbed id={candidate.politician.posts[0].social_id} />
       ]);
-    } else if (candidate.politician.posts.length == 2) {
 
+    } else if (candidate.politician.posts.length == 2) {
       return ([
         <TweetEmbed id={candidate.politician.posts[0].social_id} />,
         <TweetEmbed id={candidate.politician.posts[1].social_id} />
@@ -183,34 +169,14 @@ export default class Senate extends Component {
         ]);
       }
     }
-    }
   }
 
-  renderRepCandidatePosts() {
-    if (!this.state.repCandidate){
-      return ([]);
-    } else if (this.state.repCandidate.politician.posts.length == 1) {
-      return ([
-        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id} />
-      ]);
+  renderFirstCandidatePosts() {
+    return this.renderCandidatePosts(this.state.firstCandidate);
+  }
 
-    } else if (this.state.repCandidate.politician.posts.length == 2) {
-      return ([
-        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id} />,
-        <TweetEmbed id={this.state.repCandidate.politician.posts[1].social_id} />
-      ]);
-    } else {
-      if (!this.state.repCandidate.politician.twitter) {
-        return([
-          <p>No twitter account for this candidate</p>
-        ]);
-      } else {
-        return([
-          <p>No posts for this candidate</p>
-        ]);
-      }
-    }
-
+  renderSecondCandidatePosts() {
+    return this.renderCandidatePosts(this.state.secondCandidate);
   }
   renderTitle(){
     var title = "Select state to find candidates for Senate";
@@ -231,6 +197,7 @@ export default class Senate extends Component {
     ]);
   } 
   renderCandidates(){
+    console.log("this.state.stateIndex; "+this.state.stateIndex);
     if (this.state.stateIndex == -1){
       return([
       ]);
@@ -241,12 +208,12 @@ export default class Senate extends Component {
       return([
         <Row>
           <Col>
-            {this.renderDemCandidateName()}
-            {this.renderDemCandidatePosts()}
+            {this.renderFirstCandidateName()}
+            {this.renderFirstCandidatePosts()}
           </Col>
           <Col>
-            {this.renderRepCandidateName()}
-            {this.renderRepCandidatePosts()}
+            {this.renderSecondCandidateName()}
+            {this.renderSecondCandidatePosts()}
           </Col>
         </Row>
       ]);
