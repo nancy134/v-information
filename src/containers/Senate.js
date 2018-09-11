@@ -31,13 +31,28 @@ export default class Senate extends Component {
     var firstCandidate = null;
     var secondCandidate = null;
     var noCampaigns = false;
+    var ip_state = null
+
+    var metas = document.getElementsByTagName('meta');
+    for (var i=0; i<metas.length; i++){
+      for (var j =0; j < metas[i].attributes.length; j++){
+        if (metas[i].attributes[j].name === "property") {
+          if (metas[i].attributes[j].value === "phowma:state"){
+            ip_state = metas[i].attributes[1].value;
+            ip_state = ip_state.toLowerCase();
+          }
+        }
+      }
+    }
     States.search("list", (states) => {
       statesList = states;
       stateOptions.push(<option value={-1}>Select State</option>);
       for (let i=0; i<states.length; i++) {
-        if (states[i].id == this.state.stateId){
+        if (this.state.stateId && (states[i].id == this.state.stateId)){
           stateOptions.push(<option value={i} selected>{states[i].name}</option>);
           stateIndex = i;
+        } else if (!this.state.stateId && ip_state && (states[i].name.toLowerCase() == ip_state)){
+          window.location.href = "http://server.phowma.com/senate?state="+states[i].id;
         } else{ 
           stateOptions.push(<option value={i}>{states[i].name}</option>);
         }
@@ -81,32 +96,7 @@ export default class Senate extends Component {
 
   handleStateChange(e){
     var stateIndex = e.target.value;
-    var query = "q[election_office_state_id_eq]="+
-      this.state.states[stateIndex].id+
-      "&q[election_office_position_eq]=0"+
-      "&q[s]=party asc";
-
-    Campaigns.index(query, (campaigns) => {
-      var firstCandidate = null;
-      var secondCandidate = null;
-      var noCampaigns = false;
-      if (campaigns.length == 0) noCampaigns = true;
-      if (campaigns.length == 1) {
-        firstCandidate = campaigns[0];
-      }
-      if (campaigns.length == 2) {
-        firstCandidate = campaigns[0];
-        secondCandidate = campaigns[1];
-      }
-      console.log("firstCandidate: "+JSON.stringify(firstCandidate));
-      console.log("secondCandidate: "+JSON.stringify(secondCandidate));
-      this.setState({
-        stateIndex: stateIndex,
-        firstCandidate: firstCandidate,
-        secondCandidate: secondCandidate,
-        noCampaigns: noCampaigns
-      });
-    });
+    window.location.href = "http://server.phowma.com/senate?state="+this.state.states[stateIndex].id;
   }
   renderStateSelector2() {
     return([
@@ -116,10 +106,8 @@ export default class Senate extends Component {
     ]);
   }
   renderCandidateName(candidate){
-    console.log("candidate: "+candidate);
     var party = "";
     if (candidate){
-      console.log("there is a candidate");
       if (candidate.politician.party == 'democrat'){
         party = "(D)";
       } else if (candidate.politician.party == 'republican'){
@@ -131,14 +119,12 @@ export default class Senate extends Component {
         <h3>{candidate.politician.first_name} {candidate.politician.last_name} {party}</h3>
       ]);
     } else {
-      console.log("there is not a candidate");
       return([
       ]);
     }
 
   }
   renderFirstCandidateName() {
-    console.log("this.state.firstCandidate: "+this.state.firstCandidate);
     return this.renderCandidateName(this.state.firstCandidate);
   }
   renderSecondCandidateName() {
@@ -197,7 +183,6 @@ export default class Senate extends Component {
     ]);
   } 
   renderCandidates(){
-    console.log("this.state.stateIndex; "+this.state.stateIndex);
     if (this.state.stateIndex == -1){
       return([
       ]);

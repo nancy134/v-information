@@ -85,18 +85,6 @@ export default class Voter extends Component {
   handleStateChange(e){
     var selectedStateIndex = e.target.value;
     window.location.href = "http://server.phowma.com/voter?state="+this.state.states[selectedStateIndex].id;
-    /*
-    Campaigns.index("q[election_office_state_id_eq]="+this.state.states[selectedStateIndex].id, (campaigns) => {
-      Districts.byState(this.state.states[selectedStateIndex].id, (districts) => {
-
-        this.setState({
-          selectedStateIndex: selectedStateIndex,
-          campaigns: campaigns,
-          districts: districts
-        });
-      });
-    });
-    */
   }
   onCheckRegistration(){
     var url = this.state.states[this.state.selectedStateIndex].registered;
