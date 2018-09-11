@@ -20,10 +20,13 @@ export default class Voter extends Component {
     this.onCheckRegistration = this.onCheckRegistration.bind(this);
     this.onOfficialWebsite = this.onOfficialWebsite.bind(this);
     this.handleStateChange = this.handleStateChange.bind(this);
+    var params = new URLSearchParams(props.location.search);
+    var stateId = params.get('state');
     this.state = {
       states: null,
       stateOptions: null,
       selectedStateIndex: -1,
+      stateId: stateId,
       campaigns: null,
       districts: null
     };
@@ -47,13 +50,19 @@ export default class Voter extends Component {
       var stateOptions = [];
       var stateIndex = -1;
       for (var i=0; i<states.length; i++){
-        if (states[i].name.toLowerCase() == ip_state){
+        if (this.state.stateId && this.state.stateId == states[i].id){
           stateOptions.push(<option value={i} selected>{states[i].name}</option>);
           stateIndex = i;
+        } else if (!this.state.stateId && ip_state && (states[i].name.toLowerCase() == ip_state)){
+          stateOptions.push(<option value={i} selected>{states[i].name}</option>);
+          stateIndex = i;
+          //redirect
+          window.location.href = "http://server.phowma.com/voter?state="+states[i].id;
         } else {
           stateOptions.push(<option value={i}>{states[i].name}</option>);
         }
       }
+      if (stateIndex > -1){
       Campaigns.index("q[election_office_state_id_eq]="+states[stateIndex].id, (campaigns) => {
         Districts.byState(states[stateIndex].id, (districts) => {
           this.setState({
@@ -65,10 +74,18 @@ export default class Voter extends Component {
           });
         });
       });
+      } else {
+          this.setState({
+            states: states,
+            stateOptions: stateOptions,
+          });
+      }
     });
   }
   handleStateChange(e){
     var selectedStateIndex = e.target.value;
+    window.location.href = "http://server.phowma.com/voter?state="+this.state.states[selectedStateIndex].id;
+    /*
     Campaigns.index("q[election_office_state_id_eq]="+this.state.states[selectedStateIndex].id, (campaigns) => {
       Districts.byState(this.state.states[selectedStateIndex].id, (districts) => {
 
@@ -79,6 +96,7 @@ export default class Voter extends Component {
         });
       });
     });
+    */
   }
   onCheckRegistration(){
     var url = this.state.states[this.state.selectedStateIndex].registered;
@@ -106,7 +124,6 @@ export default class Voter extends Component {
   onHouse(e){
     var districtIndex = parseInt(e.target.value);
     var url = "http://server.phowma.com/house?district="+this.state.districts[districtIndex].id+"&state="+this.state.districts[districtIndex].state.id;
-    console.log("url: "+url);
     window.location.href = url;
   }
   renderCheckRegistration(){
@@ -204,7 +221,6 @@ export default class Voter extends Component {
           }
         }
         if (demCandidate && repCandidate){
-          console.log("i for districts: "+i);
           rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>Social Media</Button></td></tr>);
         } else if (demCandidate && !repCandidate){
           rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
@@ -245,7 +261,7 @@ export default class Voter extends Component {
   }
   render() {
     if (!this.state.states){
-      return ([<p>Loading...</p>]);
+      return ([<p className="text-center">Loading...</p>]);
     }else{
     return ([
     <Container>
