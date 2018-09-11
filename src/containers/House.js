@@ -144,7 +144,7 @@ export default class House extends Component {
     return([
         <Row>
           <Col md={{size: 12}} >
-              <h2 className="text-center">{text}</h2>
+              <h2>{text}</h2>
           </Col>
         </Row>
     ]);
@@ -152,7 +152,7 @@ export default class House extends Component {
   renderAddressBar() {
     return (
       <Alert color="primary">
-      {this.renderTitle()}
+      <h3>Find your congressional district</h3>
       <Row>
       <Col md={10}>
       <PlacesAutocomplete
@@ -195,10 +195,10 @@ export default class House extends Component {
       </PlacesAutocomplete>
       </Col>
       <Col sm={2}>
-      <Button onClick={() => {this.onFindDistrict()}}>Find Candidates</Button>
+      <Button onClick={() => {this.onFindDistrict()}}>Find District</Button>
       </Col>
       </Row>
-      <Button color="link"  onClick={() => {this.onShowDistrictSelector()}}>I already know my congressional district</Button>
+      <Button color="link"  onClick={() => {this.onShowDistrictSelector()}} className="pl-0">I already know my congressional district</Button>
        {this.renderDistrictSelector()}
       </Alert>
     );
@@ -245,7 +245,7 @@ export default class House extends Component {
   renderDemCandidateName() {
     if (this.state.demCandidate){
       return([
-        <h3>{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
+        <h3 className="text-primary">{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
       ]);
     } else {
       return([
@@ -256,7 +256,7 @@ export default class House extends Component {
   renderRepCandidateName() {
     if (this.state.repCandidate){
       return([
-        <h3>{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
+        <h3 className="text-primary">{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
       ]);
     } else {
       return([
@@ -299,6 +299,7 @@ export default class House extends Component {
     } else {
     return ([
         <div>
+        {this.renderTitle()}
         <Row>
           <Col>
             {this.renderDemCandidateName()}
