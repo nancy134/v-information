@@ -22,6 +22,7 @@ export default class Senate extends Component {
       noCampaigns: false
     }
     this.handleStateChange = this.handleStateChange.bind(this);
+
   }
 
   componentDidMount() {
@@ -54,7 +55,8 @@ export default class Senate extends Component {
           stateIndex = i;
         } else if (!this.state.stateId && ip_state && (states[i].name.toLowerCase() == ip_state)){
           redirecting = true;
-          window.location.href = "http://server.phowma.com/senate?state="+states[i].id;
+          var url = window.location.protocol + "//" + window.location.hostname + "/" + "senate?state="+states[i].id;
+          window.location.href = url; 
         } else{ 
           stateOptions.push(<option value={i}>{states[i].name}</option>);
         }
@@ -99,7 +101,9 @@ export default class Senate extends Component {
 
   handleStateChange(e){
     var stateIndex = e.target.value;
-    window.location.href = "http://server.phowma.com/senate?state="+this.state.states[stateIndex].id;
+    var url = window.location.protocol + "//" + window.location.hostname + "/" + "senate?state="+this.state.states[stateIndex].id;
+
+    window.location.href = url; 
   }
   renderStateSelector2() {
     return([

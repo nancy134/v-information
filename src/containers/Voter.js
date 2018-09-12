@@ -59,7 +59,8 @@ export default class Voter extends Component {
           stateIndex = i;
           redirecting = true;
           //redirect
-          window.location.href = "http://server.phowma.com/voter?state="+states[i].id;
+          var url = window.location.protocol + "//" + window.location.hostname + "/" + "voter?state="+states[i].id;
+          window.location.href = url; 
         } else {
           stateOptions.push(<option value={i}>{states[i].name}</option>);
         }
@@ -88,7 +89,8 @@ export default class Voter extends Component {
   }
   handleStateChange(e){
     var selectedStateIndex = e.target.value;
-    window.location.href = "http://server.phowma.com/voter?state="+this.state.states[selectedStateIndex].id;
+var url = window.location.protocol + "//" + window.location.hostname + "/" + "voter?state="+this.state.states[selectedStateIndex].id;
+    window.location.href = url; 
   }
   onCheckRegistration(){
     var url = this.state.states[this.state.selectedStateIndex].registered;
@@ -111,11 +113,12 @@ export default class Voter extends Component {
     window.open(url,"_blank");
   } 
   onSenateSocialMedia(){
-    window.location.href = "http://server.phowma.com/senate?state="+this.state.states[this.state.selectedStateIndex].id;
+var url = window.location.protocol + "//" + window.location.hostname + "/" + "senate?state="+this.state.states[this.state.selectedStateIndex].id;
+    window.location.href = url;
   }
   onHouse(e){
     var districtIndex = parseInt(e.target.value);
-    var url = "http://server.phowma.com/house?district="+this.state.districts[districtIndex].id+"&state="+this.state.districts[districtIndex].state.id;
+    var url = window.location.protocol + "//" + window.location.hostname + "/house?district=" + this.state.districts[districtIndex].id + "&state=" + this.state.districts[districtIndex].state.id;
     window.location.href = url;
   }
   renderCheckRegistration(){

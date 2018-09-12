@@ -101,7 +101,8 @@ export default class House extends Component {
   }
 
   onSenate(){
-    window.location.href = "http://server.phowma.com/senate?state="+this.state.district.state.id;
+    var url = window.location.protocol + "//" + window.location.hostname + "/" + "senate?state="+this.state.district.state.id;
+    window.location.href = url; 
   }
   onShowDistrictSelector(){
     this.setState({showDistrictSelector: true});
