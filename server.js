@@ -8,122 +8,76 @@ const fs = require('fs');
 const httprequest = require('request');
 const https = require('https');
 
+function replaceMeta(data,body,request){
+  url = 'http://'+request.headers.host;
+  console.log("url: "+request.headers.host+request.originalUrl);
+  console.log("body.region: "+body.region);
+  data = data.replace(/\$PAGE_TITLE/g, 'Voter Information');
+  data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information source for the 2018 Midterm Elections');
+  data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
+  data = data.replace(/\$TWITTER_IMAGE/g, url+'/midtermsTwitter.jpg');
+  data = data.replace(/\$PAGE_URL/g, url+request.originalUrl);
+  data = data.replace(/\$SITE_NAME/g, 'Voter Information');
+  data = data.replace(/\$STATE/g, body.region);
+
+  return data;
+}
+
 app.get('/', function(request, response){
-  console.log("app.get(/)");
   url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
-    console.log("body.region: "+body.region);
-
     const filePath = path.resolve(__dirname, './build', 'index.html');
-
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
         return console.log(err);
       }
-      data = data.replace(/\$PAGE_TITLE/g, 'Home');
-      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information for voters');
-      data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
-      data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
-      data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/');
-      result = data.replace(/\$SITE_NAME/g, 'Voter Information');
-      result = data.replace(/\$STATE/g, body.region);
+      result = replaceMeta(data,body,request);
       response.send(result);
     });
   });
 });
+
 app.get('/voter', function(request, response){
-  console.log('app.get(/voter)');
   url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
-    console.log("body.region: "+body.region);
     const filePath = path.resolve(__dirname, './build', 'index.html');
-
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
         return console.log(err);
       }
-      data = data.replace(/\$PAGE_TITLE/g, 'Check your voter registration');
-      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Supreme Court says states can remove voters who skip elections, ignore warnings');
-      data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
-      data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
-      data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/registration');
-      result = data.replace(/\$SITE_NAME/g, 'Voter Information');
-      result = data.replace(/\$STATE/g, body.region);
-      //response.redirect('/registration/'+body.region);
+      result = replaceMeta(data,body,request);
       response.send(result);
     });
   });
 });
 
-
-app.get('/voter/*', function(request, response){
-  console.log('app.get(/voter/*)');
-  url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
-  httprequest(url, { json: true }, (err, res, body) => {
-    if (err) { return console.log(err); }
-    console.log("body.region: "+body.region);
-    const filePath = path.resolve(__dirname, './build', 'index.html');
-
-    fs.readFile(filePath, 'utf8', function(err, data) {
-      if (err) {
-        return console.log(err);
-      }
-      data = data.replace(/\$PAGE_TITLE/g, 'Check your voter registration');
-      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Supreme Court says states can remove voters who skip elections, ignore warnings');
-      data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
-      data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
-      data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/registration');
-      result = data.replace(/\$SITE_NAME/g, 'Voter Information');
-      response.send(result);
-    });
-  });
-});
 app.get('/senate', function(request, response){
-  console.log('app.get(/senate)');
   url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
-    console.log("body.region: "+body.region);
     const filePath = path.resolve(__dirname, './build', 'index.html');
-
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
         return console.log(err);
       }
-      data = data.replace(/\$PAGE_TITLE/g, 'Check your voter registration');
-      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Supreme Court says states can remove voters who skip elections, ignore warnings');
-      data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
-      data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
-      data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/registration');
-      result = data.replace(/\$SITE_NAME/g, 'Voter Information');
-      result = data.replace(/\$STATE/g, body.region);
-      //response.redirect('/registration/'+body.region);
+      result = replaceMeta(data,body,request);
       response.send(result);
     });
   });
 });
 
-
-app.get('/senate/*', function(request, response){
-  console.log('app.get(/senate/*)');
+app.get('/house', function(request, response){
   url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
-    console.log("body.region: "+body.region);
     const filePath = path.resolve(__dirname, './build', 'index.html');
-
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
         return console.log(err);
       }
-      data = data.replace(/\$PAGE_TITLE/g, 'Check your voter registration');
-      //data = data.replace(/\$PAGE_DESCRIPTION/g, 'Supreme Court says states can remove voters who skip elections, ignore warnings');
-      data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
-      data = data.replace(/\$TWITTER_IMAGE/g, 'http://www.voter-information.com/CheckRegistration.jpg');
-      data = data.replace(/\$PAGE_URL/g, 'http://www.voter-information.com/registration');
-      result = data.replace(/\$SITE_NAME/g, 'Voter Information');
+      result = replaceMeta(data,body,request);
       response.send(result);
     });
   });

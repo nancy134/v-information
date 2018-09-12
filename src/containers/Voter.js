@@ -49,6 +49,7 @@ export default class Voter extends Component {
     States.search("min", (states) => {
       var stateOptions = [];
       var stateIndex = -1;
+      var redirecting = false;
       for (var i=0; i<states.length; i++){
         if (this.state.stateId && this.state.stateId == states[i].id){
           stateOptions.push(<option value={i} selected>{states[i].name}</option>);
@@ -56,29 +57,32 @@ export default class Voter extends Component {
         } else if (!this.state.stateId && ip_state && (states[i].name.toLowerCase() == ip_state)){
           stateOptions.push(<option value={i} selected>{states[i].name}</option>);
           stateIndex = i;
+          redirecting = true;
           //redirect
           window.location.href = "http://server.phowma.com/voter?state="+states[i].id;
         } else {
           stateOptions.push(<option value={i}>{states[i].name}</option>);
         }
       }
-      if (stateIndex > -1){
-      Campaigns.index("q[election_office_state_id_eq]="+states[stateIndex].id, (campaigns) => {
-        Districts.byState(states[stateIndex].id, (districts) => {
+      if (!redirecting){
+        if (stateIndex > -1){
+          Campaigns.index("q[election_office_state_id_eq]="+states[stateIndex].id, (campaigns) => {
+            Districts.byState(states[stateIndex].id, (districts) => {
+              this.setState({
+                states: states,
+                stateOptions: stateOptions,
+                campaigns: campaigns,
+                selectedStateIndex: stateIndex,
+                districts: districts
+              });
+            });
+          });
+        } else {
           this.setState({
             states: states,
             stateOptions: stateOptions,
-            campaigns: campaigns,
-            selectedStateIndex: stateIndex,
-            districts: districts
           });
-        });
-      });
-      } else {
-          this.setState({
-            states: states,
-            stateOptions: stateOptions,
-          });
+        }
       }
     });
   }

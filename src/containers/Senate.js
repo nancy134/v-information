@@ -46,18 +46,20 @@ export default class Senate extends Component {
     }
     States.search("list", (states) => {
       statesList = states;
+      var redirecting = false;
       stateOptions.push(<option value={-1}>Select State</option>);
       for (let i=0; i<states.length; i++) {
         if (this.state.stateId && (states[i].id == this.state.stateId)){
           stateOptions.push(<option value={i} selected>{states[i].name}</option>);
           stateIndex = i;
         } else if (!this.state.stateId && ip_state && (states[i].name.toLowerCase() == ip_state)){
+          redirecting = true;
           window.location.href = "http://server.phowma.com/senate?state="+states[i].id;
         } else{ 
           stateOptions.push(<option value={i}>{states[i].name}</option>);
         }
       }
-
+      if (!redirecting){
       if (this.state.stateId){
         var query = "q[election_office_state_id_eq]="+
           this.state.stateId+
@@ -90,6 +92,7 @@ export default class Senate extends Component {
           stateIndex: stateIndex,
           noCampaigns: noCampaigns
         });
+      }
       }
     });
   }

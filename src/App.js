@@ -28,7 +28,6 @@ class App extends Component {
             <Nav className="ml-auto" navbar>
               <RouteNavItem href="/house">House</RouteNavItem>
               <RouteNavItem href="/senate">Senate</RouteNavItem>
-              <RouteNavItem href="/governor">Governors</RouteNavItem>
               <RouteNavItem href="/voter">Voter</RouteNavItem>
             </Nav>
           </Collapse>
