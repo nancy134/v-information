@@ -12,16 +12,18 @@ import { Form, FormGroup, Input } from 'reactstrap';
 export default class House extends Component {
   constructor(props) {
     super(props)
-    const params = new URLSearchParams(props.location.search);
-    const districtId = params.get('district');
-    const stateId = params.get('state');
+    var params = new URLSearchParams(props.location.search);
+    var districtId = params.get('district');
+    var stateId = params.get('state');
+    var showDistrictSelector = false;
+    if (stateId && districtId) showDistrictSelector = true;
     this.state = {
       address: '',
       districtId: districtId,
       district: null,
       demCandidate: null,
       repCandidate: null,
-      showDistrictSelector: false,
+      showDistrictSelector: showDistrictSelector,
       stateOptions: null,
       selectedState: 0,
       stateDisabled: true,
