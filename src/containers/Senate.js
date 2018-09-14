@@ -70,6 +70,21 @@ export default class Senate extends Component {
         Campaigns.index(query, (campaigns) => {
           var firstCandidate = null;
           var secondCandidate = null;
+          var senateOffices = [];
+          for (var i=0; i<campaigns.length; i++){
+            if (campaigns[i].election.office.position == 'senator'){
+              senateOffices.push(campaigns[i].election.office.id);
+            }
+          }
+          var uniqueSenateOffices = Array.from(new Set(senateOffices));
+          for (var i=0; i<campaigns.length; i++){
+            if (campaigns[i].election.office.position == 'senator' && campaigns[i].election.office.id == uniqueSenateOffices[0]){
+              if (!firstCandidate) firstCandidate = campaigns[i];
+              else if (!secondCandidate) secondCandidate = campaigns[i];
+            }
+          }
+
+          /*  
           if (campaigns.length == 0) noCampaigns = true;
           if (campaigns.length == 1) {
             firstCandidate = campaigns[0];
@@ -78,6 +93,7 @@ export default class Senate extends Component {
             firstCandidate = campaigns[0];
             secondCandidate = campaigns[1]
           }
+          */
           this.setState({
             stateOptions: stateOptions,
             states: statesList,
@@ -86,6 +102,7 @@ export default class Senate extends Component {
             secondCandidate: secondCandidate,
             noCampaigns: noCampaigns
           });
+      
         });
       } else {
         this.setState({
@@ -132,9 +149,11 @@ export default class Senate extends Component {
 
   }
   renderFirstCandidateName() {
+    if (this.state.firstCandidate)
     return this.renderCandidateName(this.state.firstCandidate);
   }
   renderSecondCandidateName() {
+    if (this.state.secondCandidate)
     return this.renderCandidateName(this.state.secondCandidate);
   }
 

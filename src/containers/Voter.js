@@ -160,9 +160,18 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
   renderSenateCandidates(){
     var firstCandidate = null;
     var secondCandidate = null;
+   
     if (this.state.campaigns){
+      var senatorCount = 0;
+      var senateOffices = [];
       for (var i=0; i<this.state.campaigns.length; i++){
         if (this.state.campaigns[i].election.office.position == 'senator'){
+          senateOffices.push(this.state.campaigns[i].election.office.id);
+        }
+      }
+      var uniqueSenateOffices = Array.from(new Set(senateOffices));
+      for (var i=0; i<this.state.campaigns.length; i++){
+        if (this.state.campaigns[i].election.office.position == 'senator' && this.state.campaigns[i].election.office.id == uniqueSenateOffices[0]){
           if (!firstCandidate) firstCandidate = this.state.campaigns[i].politician;
           else if (!secondCandidate) secondCandidate = this.state.campaigns[i].politician;
         }
