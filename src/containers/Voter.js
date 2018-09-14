@@ -216,11 +216,11 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
           }
         }
         if (demCandidate && repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>Social Media</Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td><Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>Social Media</Button></td></tr>);
         } else if (demCandidate && !repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
         } else if (!demCandidate && repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td></td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
         }
       }
       return([
@@ -232,7 +232,6 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
               <th>District</th>
               <th>Democrat</th>
               <th>Republican</th>
-              <th>Other</th>
               <th>Social Media</th>
             </tr>
           </thead>
