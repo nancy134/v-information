@@ -33,7 +33,6 @@ export default class Senate extends Component {
     var secondCandidate = null;
     var noCampaigns = false;
     var ip_state = null
-
     var metas = document.getElementsByTagName('meta');
     for (var i=0; i<metas.length; i++){
       for (var j =0; j < metas[i].attributes.length; j++){
@@ -162,13 +161,13 @@ export default class Senate extends Component {
       return ([]);
     } else if (candidate.politician.posts.length == 1) {
       return ([
-        <TweetEmbed id={candidate.politician.posts[0].social_id} />
+        <TweetEmbed id={candidate.politician.posts[0].social_id} options={{width: '100%'}} />
       ]);
 
     } else if (candidate.politician.posts.length == 2) {
       return ([
-        <TweetEmbed id={candidate.politician.posts[0].social_id} />,
-        <TweetEmbed id={candidate.politician.posts[1].social_id} />
+        <TweetEmbed id={candidate.politician.posts[0].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={candidate.politician.posts[1].social_id} options={{width: '100%'}}/>
       ]);
     } else {
       if (!candidate.politician.twitter) {
