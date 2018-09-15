@@ -225,13 +225,13 @@ export default class House extends Component {
   renderDemCandidatePosts() {
     if (this.state.demCandidate.politician.posts.length == 1) {
       return ([
-        <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} />
+        <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />
       ]);
     } else if (this.state.demCandidate.politician.posts.length == 2) {
 
       return ([
-        <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} />,
-        <TweetEmbed id={this.state.demCandidate.politician.posts[1].social_id} />
+        <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.demCandidate.politician.posts[1].social_id} options={{width: '100%'}} />
       ]);
     } else {
       if (!this.state.demCandidate.politician.twitter) {
@@ -273,13 +273,13 @@ export default class House extends Component {
       return ([]);
     } else if (this.state.repCandidate.politician.posts.length == 1) {
       return ([
-        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id} />
+        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id} options={{width: '100%'}} />
       ]);
 
     } else if (this.state.repCandidate.politician.posts.length == 2) {
       return ([
-        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id} />,
-        <TweetEmbed id={this.state.repCandidate.politician.posts[1].social_id} />
+        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id}  options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.repCandidate.politician.posts[1].social_id}  options={{width: '100%'}}/>
       ]);
     } else {
       if (!this.state.repCandidate.politician.twitter) {
