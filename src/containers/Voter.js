@@ -54,6 +54,7 @@ export default class Voter extends Component {
       var stateOptions = [];
       var stateIndex = -1;
       var redirecting = false;
+      stateOptions.push(<option value={stateIndex} selected>Select state</option>);
       for (var i=0; i<states.length; i++){
         if (this.state.stateId && this.state.stateId == states[i].id){
           stateOptions.push(<option value={i} selected>{states[i].name}</option>);
@@ -145,6 +146,9 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
   }
   renderWebsites(){
     var rockTheVoteUrl = "https://www.rockthevote.org/voting-information/nebraska/";
+    if (!this.state.campaigns){
+      return([]);
+    } else {
     return([
       <Button
         color="link"
@@ -160,6 +164,7 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
       </Button>
 
     ]);
+    }
   }
   renderSenateCandidates(){
     var firstCandidate = null;
@@ -266,23 +271,11 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
       </div>
     ]);
   }
-  render() {
-    if (!this.state.states){
-      return ([<p className="text-center">Loading...</p>]);
-    }else{
-    return ([
-    <Container>
-      <Jumbotron className="pt-2 pb-2">
-        <h2 className="text-center">2018 Midterm Election Information</h2>
-        <h4 className="text-center">Select your state</h4>
-        <Row className="m-3">
-          <Col md={{size: 4, offset: 4}} className="text-center">
-            {this.renderStateSelector()}
-          </Col>
-        </Row>
-      </Jumbotron>
-      {this.renderSenateCandidates()}
-      {this.renderCongressionalCandidates()}
+  renderVoterInformation(){
+    if (!this.state.campaigns){
+      return([]);
+    } else {
+      return([
       <Jumbotron className="pt-2">
         <h3 className="text-center">Voter Information</h3>
         <CardDeck>
@@ -306,6 +299,28 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
           </Card>
         </CardDeck>
       </Jumbotron>
+
+      ]);
+    }
+  }
+  render() {
+    if (!this.state.states){
+      return ([<p className="text-center">Loading...</p>]);
+    }else{
+    return ([
+    <Container>
+      <Jumbotron className="pt-2 pb-2">
+        <h2 className="text-center">2018 Midterm Election Information</h2>
+        <h4 className="text-center">Select your state</h4>
+        <Row className="m-3">
+          <Col md={{size: 4, offset: 4}} className="text-center">
+            {this.renderStateSelector()}
+          </Col>
+        </Row>
+      </Jumbotron>
+      {this.renderSenateCandidates()}
+      {this.renderCongressionalCandidates()}
+      {this.renderVoterInformation()}
     </Container>
     ]);
   }
