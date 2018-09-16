@@ -5,13 +5,16 @@ import { Form, Input, Button } from 'reactstrap';
 import TweetEmbed from 'react-tweet-embed';
 import States from '../actions/States';
 import Campaigns from '../actions/Campaigns';
+import { getJsonFromUrl } from '../utils.js';
 
 export default class Senate extends Component {
   constructor(props) {
     super(props)
 
-    const params = new URLSearchParams(props.location.search);
-    const stateId = params.get('state');
+    var results = getJsonFromUrl(props.location.search.substr(1));
+    var stateId = null;
+    if (results.state) stateId = results.state;
+   
     this.state = {
       stateOptions: null,
       stateId: stateId,
@@ -38,7 +41,7 @@ export default class Senate extends Component {
       for (var j =0; j < metas[i].attributes.length; j++){
         if (metas[i].attributes[j].name === "property") {
           if (metas[i].attributes[j].value === "phowma:state"){
-            ip_state = metas[i].attributes[1].value;
+            ip_state = metas[i].getAttribute("content");
             ip_state = ip_state.toLowerCase();
           }
         }

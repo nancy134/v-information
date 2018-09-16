@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { Container, Jumbotron } from 'reactstrap';
 import Contacts from '../actions/Contacts';
+import { getJsonFromUrl } from '../utils.js';
 
 export default class Contact extends Component {
   constructor(props){
     super(props)
-    var params = new URLSearchParams(props.location.search);
-    var name = params.get('name');
-    var email = params.get('email');
-    var message = params.get('message');
+
+    var results = getJsonFromUrl(props.location.search.substr(1));
+    var name = null;
+    var email = null;
+    var message = null;
+    if (results.name) name = results.name;
+    if (results.email) email = results.email;
+    if (results.message) message = results.message;
 
     this.state = {
       name: name,

@@ -8,14 +8,20 @@ import Districts from '../actions/Districts';
 import Campaigns from '../actions/Campaigns';
 import States from '../actions/States';
 import { Form, FormGroup, Input } from 'reactstrap';
+import { getJsonFromUrl } from '../utils.js';
 
 export default class House extends Component {
   constructor(props) {
     super(props)
-    var params = new URLSearchParams(props.location.search);
-    var districtId = params.get('district');
-    var stateId = params.get('state');
+
+    var results = getJsonFromUrl(props.location.search.substr(1));
+    var districtId = null;
+    var stateId = null;
+    if (results.district) districtId = results.district;
+    if (results.state) stateId = results.state;
+
     var showDistrictSelector = false;
+
     if (stateId && districtId) showDistrictSelector = true;
     this.state = {
       address: '',
