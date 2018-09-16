@@ -13,6 +13,7 @@ import { Carousel, CarouselItem } from 'reactstrap';
 import { Media } from 'reactstrap';
 import { CardDeck, Card, CardBody, CardTitle } from 'reactstrap';
 import { Table } from 'reactstrap';
+import { getJsonFromUrl } from '../utils.js';
 
 export default class Voter extends Component {
   constructor(props) {
@@ -20,8 +21,11 @@ export default class Voter extends Component {
     this.onCheckRegistration = this.onCheckRegistration.bind(this);
     this.onOfficialWebsite = this.onOfficialWebsite.bind(this);
     this.handleStateChange = this.handleStateChange.bind(this);
-    var params = new URLSearchParams(props.location.search);
-    var stateId = params.get('state');
+
+    var results = getJsonFromUrl(props.location.search.substr(1));
+    var stateId = null;
+    if (results.state) stateId = results.state;
+
     this.state = {
       states: null,
       stateOptions: null,
@@ -40,7 +44,7 @@ export default class Voter extends Component {
       for (var j =0; j < metas[i].attributes.length; j++){
         if (metas[i].attributes[j].name === "property") {
           if (metas[i].attributes[j].value === "phowma:state"){
-            ip_state = metas[i].attributes[1].value;
+            ip_state = metas[i].getAttribute("content");
             ip_state = ip_state.toLowerCase();
           }
         }
