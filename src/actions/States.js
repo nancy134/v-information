@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 function search(type,cb) {
-  var url = 'http://www.voter-information.com/api/api/v1/states';
+  var url = 'https://www.voter-information.com/api/api/v1/states';
   if (type === "list")
     url = url + "?type=list";
   else if (type === "min")

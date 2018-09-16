@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 function index(q, cb) {
-  var url = 'http://www.voter-information.com/api/api/v1/campaigns?' + q
+  var url = 'https://www.voter-information.com/api/api/v1/campaigns?' + q
   return fetch(url, {
     accept: 'application/json',
   }).then(checkStatus)
