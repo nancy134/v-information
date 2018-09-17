@@ -85,7 +85,7 @@ export default class Senate extends Component {
               else if (!secondCandidate) secondCandidate = campaigns[i];
             }
           }
-
+          if (campaigns.length == 0) noCampaigns = true; 
           /*  
           if (campaigns.length == 0) noCampaigns = true;
           if (campaigns.length == 1) {
