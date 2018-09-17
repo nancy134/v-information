@@ -24,7 +24,7 @@ function replaceMeta(data,body,request){
 }
 
 app.get('/', function(request, response){
-  url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     const filePath = path.resolve(__dirname, './build', 'index.html');
@@ -39,7 +39,7 @@ app.get('/', function(request, response){
 });
 
 app.get('/voter', function(request, response){
-  url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     const filePath = path.resolve(__dirname, './build', 'index.html');
@@ -54,7 +54,8 @@ app.get('/voter', function(request, response){
 });
 
 app.get('/senate', function(request, response){
-  url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
+  console.log("x-forwarded-for: "+request.headers['x-forwarded-for']);
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     const filePath = path.resolve(__dirname, './build', 'index.html');
@@ -69,7 +70,7 @@ app.get('/senate', function(request, response){
 });
 
 app.get('/house', function(request, response){
-  url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     const filePath = path.resolve(__dirname, './build', 'index.html');
@@ -87,7 +88,7 @@ app.use(express.static(path.resolve(__dirname, 'build')));
 
 app.get('*', function(request, response) {
   console.log("app.get(*) ");
-  url = 'https://ipinfo.io/'+request.headers['x-real-ip'] + '/geo';
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     console.log("body.region: "+body.region);

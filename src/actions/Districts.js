@@ -1,7 +1,9 @@
 /* eslint-disable no-undef */
 
 function search(address,city,state,zip,cb) {
-  var url = 'https://www.voter-information.com/api/api/v1/districts/find?address='+address+"&city="+city+"&state="+state;
+  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/districts/find?address="+address+"&city="+city+"&state="+state;
+
+  //var url = 'https://www.voter-information.com/api/api/v1/districts/find?address='+address+"&city="+city+"&state="+state;
   return fetch(url, {
     accept: 'application/json',
   }).then(checkStatus)
@@ -10,7 +12,8 @@ function search(address,city,state,zip,cb) {
 }
 
 function searchFull(address,cb) {
-  var url = 'https://www.voter-information.com/api/api/v1/districts/find?faddress='+address;
+  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/find?faddress="+address;
+  //var url = 'https://www.voter-information.com/api/api/v1/districts/find?faddress='+address;
   return fetch(url, {
     accept: 'application/json',
   }).then(checkStatus)
@@ -19,7 +22,8 @@ function searchFull(address,cb) {
 }
 
 function show(id, cb){
-  var url = 'https://www.voter-information.com/api/api/v1/districts/'+id;
+  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/districts/"+id;
+  //var url = 'https://www.voter-information.com/api/api/v1/districts/'+id;
   return fetch(url, {
     accept: 'application/json',
   }).then(checkStatus)
@@ -28,7 +32,8 @@ function show(id, cb){
 }
 
 function byState(state_id,cb){
-  var url = 'https://www.voter-information.com/api/api/v1/districts?state_id='+state_id;
+  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/districts?state_id="+state_id;
+  //var url = 'https://www.voter-information.com/api/api/v1/districts?state_id='+state_id;
   return fetch(url, {
     accept: 'application/json',
   }).then(checkStatus)

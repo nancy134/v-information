@@ -1,7 +1,9 @@
 /* eslint-disable no-undef */
 
 function index(q, cb) {
-  var url = 'https://www.voter-information.com/api/api/v1/campaigns?' + q
+  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/campaigns?" +q;
+
+  //var url = 'https://www.voter-information.com/api/api/v1/campaigns?' + q
   return fetch(url, {
     accept: 'application/json',
   }).then(checkStatus)
