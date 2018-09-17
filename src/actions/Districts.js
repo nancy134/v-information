@@ -12,7 +12,7 @@ function search(address,city,state,zip,cb) {
 }
 
 function searchFull(address,cb) {
-  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/find?faddress="+address;
+  var url = window.location.protocol + "//" + window.location.hostname + "/api/api/v1/districts/find?faddress="+address;
   //var url = 'https://www.voter-information.com/api/api/v1/districts/find?faddress='+address;
   return fetch(url, {
     accept: 'application/json',
