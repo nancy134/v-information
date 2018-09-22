@@ -11,7 +11,7 @@ import Districts from '../actions/Districts';
 import PropTypes from 'prop-types';
 import { Carousel, CarouselItem } from 'reactstrap';
 import { Media } from 'reactstrap';
-import { CardDeck, Card, CardBody, CardTitle } from 'reactstrap';
+import { CardDeck, Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { getJsonFromUrl } from '../utils.js';
 
@@ -112,6 +112,7 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "vo
     window.open(url,"_blank");
   }
   onHeadCount(){
+
     var url = "https://www.headcount.org/state/"+this.state.states[this.state.selectedStateIndex].name;
     url = url.replace(" ","-");
     url = url.toLowerCase();
@@ -190,18 +191,24 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
     return([
       <Jumbotron className="pt-2 pb-2">
         <h3 className="text-center">US Senate Candidates</h3>
+        <p className="text-center">Below are the Senate candidates in {this.state.states[this.state.selectedStateIndex].name}.</p>
         <Row>
         <Col>
         <Card>
+          <CardImg top width="100%" src={firstCandidate.twitter_banner} />
           <CardBody>
             <CardTitle>{firstCandidate.first_name} {firstCandidate.last_name} ({firstCandidate.party[0].toUpperCase()})</CardTitle>
+            <p>{firstCandidate.twitter_bio}</p>
           </CardBody>
         </Card>
         </Col>
         <Col>
         <Card>
+          <CardImg top width="100%" src={secondCandidate.twitter_banner} />
+
           <CardBody>
             <CardTitle>{secondCandidate.first_name} {secondCandidate.last_name} ({secondCandidate.party[0].toUpperCase()})</CardTitle>
+            <p>{secondCandidate.twitter_bio}</p>
           </CardBody>
         </Card>
         </Col>
@@ -234,23 +241,40 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
           }
         }
         if (demCandidate && repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td><Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>Social Media</Button></td></tr>);
+          rows.push(
+            <tr>
+              <td>{this.state.districts[i].name}</td>
+              <td>
+                <h4><img src={demCandidate.twitter_image}/>{demCandidate.first_name} {demCandidate.last_name}</h4>
+                <p>{demCandidate.twitter_bio}</p>
+              </td>
+              <td>
+                <h4><img src={repCandidate.twitter_image}/>{repCandidate.first_name} {repCandidate.last_name}</h4>
+                <p>{repCandidate.twitter_bio}</p>
+              </td>
+              <td>
+                <Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>See More</Button>
+              </td>
+            </tr>
+          );
         } else if (demCandidate && !repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>See More</Button></td></tr>);
         } else if (!demCandidate && repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>Social Media</Button></td></tr>);
+          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>See More</Button></td></tr>);
         }
       }
       return([
       <Jumbotron className="pt-2 pb-2">
         <h3 className="text-center">US Congressional Candidates</h3>
+        <p className="text-center">Below are the Democratic and Republican candidates for each of the Districts in {this.state.states[this.state.selectedStateIndex].name}.<br/>
+If you don't know your congressional district you can find it <a href="./house">here.</a></p>
         <Table>
           <thead>
             <tr>
               <th>District</th>
               <th>Democrat</th>
               <th>Republican</th>
-              <th>Social Media</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -311,7 +335,8 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
     <Container>
       <Jumbotron className="pt-2 pb-2">
         <h2 className="text-center">2018 Midterm Election Information</h2>
-        <h4 className="text-center">Select your state</h4>
+        <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats. These elections are important because they determine which party controls the House and Senate.</p>
+        <h4 className="text-center">Select a state to find out the candidates up for election</h4>
         <Row className="m-3">
           <Col md={{size: 4, offset: 4}} className="text-center">
             {this.renderStateSelector()}
