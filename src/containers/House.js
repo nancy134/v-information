@@ -229,6 +229,9 @@ export default class House extends Component {
     }
   }
   renderDemCandidatePosts() {
+    if (!this.state.demCandidate){
+      return([]);
+    }else{
     if (this.state.demCandidate.politician.posts.length == 1) {
       return ([
         <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />
@@ -249,6 +252,7 @@ export default class House extends Component {
           <p>No posts for this candidate</p>
         ]);
       }
+    }
     }
   }
   renderDemCandidateName() {

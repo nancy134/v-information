@@ -258,9 +258,31 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
             </tr>
           );
         } else if (demCandidate && !repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>{demCandidate.first_name} {demCandidate.last_name}</td><td>No candidate</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>See More</Button></td></tr>);
+          rows.push(
+            <tr>
+              <td>{this.state.districts[i].name}</td>
+              <td>
+                <h4><img src={demCandidate.twitter_image}/>{demCandidate.first_name} {demCandidate.last_name}</h4>
+              </td>
+              <td>No Republican candidate</td>
+              <td>
+                <Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>See More</Button>
+              </td>
+            </tr>
+          );
         } else if (!demCandidate && repCandidate){
-          rows.push(<tr><td>{this.state.districts[i].name}</td><td>No candidate</td><td>{repCandidate.first_name} {repCandidate.last_name}</td><td><Button color="link" value={i} onClick={() => {this.onHouse(i)}}>See More</Button></td></tr>);
+          rows.push(
+            <tr>
+              <td>{this.state.districts[i].name}</td>
+              <td>No Democratic candidate</td>
+              <td>
+                <h4><img src={repCandidate.twitter_image}/>{repCandidate.first_name} {repCandidate.last_name}</h4>
+              </td>
+              <td>
+                <Button color="link" value={i} onClick={(e) => {this.onHouse(e)}}>See More</Button>
+              </td>
+            </tr>
+          );
         }
       }
       return([
