@@ -130,9 +130,10 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "vo
     window.open(url, "_blank");
   }
   onRockTheVote(){
-    var url = "https://www.rockthevote.org/voting-information/"+this.state.states[this.state.selectdStateIndex].name;
+    var url = "https://www.rockthevote.org/voting-information/"+this.state.states[this.state.selectedStateIndex].name;
     url = url.replace(" ","-");
     url = url.toLowerCase();
+    console.log("url: "+url);
     window.open(url,"_blank");
   }
   onHeadCount(){
