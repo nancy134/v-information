@@ -235,6 +235,7 @@ export default class Senate extends Component {
   }
 
   render() {
+    if (this.state.stateIndex > -1){
     return ([
       <Container>
         <Jumbotron>
@@ -243,6 +244,9 @@ export default class Senate extends Component {
         </Jumbotron>
       </Container>
     ]);
+    }else{
+      return([<p className="text-center">Loading...Please wait...</p>]);
+    }
   }
 
 }

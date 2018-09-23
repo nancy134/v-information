@@ -20,25 +20,35 @@ function replaceMeta(data,body,request){
   data = data.replace(/\$PAGE_URL/g, url+request.originalUrl);
   data = data.replace(/\$SITE_NAME/g, 'Voter Information');
   data = data.replace(/\$STATE/g, body.region);
-
+  data = data.replace(/\$IP/g, request.headers['x-forwarded-for']);
   return data;
 }
 
-//app.get('/', function(request, response){
-//  console.log("app.get('/') "+request.headers['x-forwarded-for']);
-//  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
-//  httprequest(url, { json: true }, (err, res, body) => {
-//    if (err) { return console.log(err); }
-//    const filePath = path.resolve(__dirname, './build', 'index.html');
-//    fs.readFile(filePath, 'utf8', function(err, data) {
-//      if (err) {
-//        return console.log(err);
-//      }
-//      result = replaceMeta(data,body,request);
-//      response.send(result);
-//    });
-//  });
-//});
+function replaceMeta2(data,request){
+  url = 'http://'+request.headers.host;
+  console.log("url: "+request.headers.host+request.originalUrl);
+  data = data.replace(/\$PAGE_TITLE/g, 'Voter Information');
+  data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information source for the 2018 Midterm Elections');
+  data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
+  data = data.replace(/\$TWITTER_IMAGE/g, url+'/midtermsTwitter.jpg');
+  data = data.replace(/\$PAGE_URL/g, url+request.originalUrl);
+  data = data.replace(/\$SITE_NAME/g, 'Voter Information');
+  //data = data.replace(/\$STATE/g, body.region);
+  data = data.replace(/\$IP/g, request.headers['x-forwarded-for']);
+  return data;
+}
+
+app.get('/', function(request, response){
+  console.log("app.get('/') "+request.headers['x-forwarded-for']);
+  const filePath = path.resolve(__dirname, './build', 'index.html');
+  fs.readFile(filePath, 'utf8', function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    result = replaceMeta2(data,request);
+    response.send(result);
+  });
+});
 
 app.get('/voter', function(request, response){
   console.log("app.get('/voter') "+request.headers['x-forwarded-for']);

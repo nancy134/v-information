@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './containers/Home';
 import Registration from './containers/Registration';
 import House from './containers/House';
@@ -11,7 +11,9 @@ import Candidates from './containers/Candidates';
 
 export default () =>
   <Switch>
-    <Route path="/" exact component={Voter} />
+    <Route exact path="/" render={() => (
+      <Redirect to="/voter"/>
+    )}/>
     <Route path="/home" exact component={Home} />
     <Route path="/registration" exact component={Registration} />
     <Route path="/registration/:id" exact component={Registration} />

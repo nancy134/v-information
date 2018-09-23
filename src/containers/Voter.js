@@ -38,6 +38,7 @@ export default class Voter extends Component {
 
   componentDidMount(){
     var ip_state = null;
+    var ip_address = null;
     var metas = document.getElementsByTagName('meta');
     for (var i = 0; i< metas.length; i++)
     {
@@ -47,9 +48,32 @@ export default class Voter extends Component {
             ip_state = metas[i].getAttribute("content");
             ip_state = ip_state.toLowerCase();
           }
+          if (metas[i].attributes[j].value === "phowma:ip"){
+            ip_address = metas[i].getAttribute("content");
+          }
+
         }
       }
-    } 
+    }
+    if (ip_state === "$state") ip_state = null;
+    if (ip_address === "$IP") ip_address = null;
+    if (!ip_state && ip_address){
+
+      const request = async () => {
+        var url = 'https://ipinfo.io/'+ip_address+'/geo';
+        const response = await fetch(url);
+        const json = await response.json();
+        if (json.region) {
+          ip_state = json.region.toLowerCase();
+        } 
+        this.initializeStateData(ip_address, ip_state);
+      }
+      request();
+    } else {
+      this.initializeStateData(ip_address, ip_state);
+    }
+  }
+  initializeStateData(ip_address, ip_state){
     States.search("min", (states) => {
       var stateOptions = [];
       var stateIndex = -1;

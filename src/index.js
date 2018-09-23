@@ -18,4 +18,4 @@ ReactDOM.render(
   </MixpanelProvider>, 
   document.getElementById('root')
 );
-registerServiceWorker();
+//registerServiceWorker();
