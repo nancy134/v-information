@@ -9,9 +9,8 @@ const httprequest = require('request');
 const https = require('https');
 
 function replaceMeta(data,body,request){
-  console.log("body: "+body);
-  url = 'http://'+request.headers.host;
-  console.log("url: "+request.headers.host+request.originalUrl);
+  url = request.headers['x-forwarded-proto']+"://"+request.headers.host;
+  console.log("url: "+url+request.originalUrl);
   console.log("body.region: "+body.region);
   data = data.replace(/\$PAGE_TITLE/g, 'Voter Information');
   data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information source for the 2018 Midterm Elections');
@@ -25,7 +24,7 @@ function replaceMeta(data,body,request){
 }
 
 function replaceMeta2(data,request){
-  url = 'http://'+request.headers.host;
+  url = request.headers['x-forwarded-proto']+"://"+request.headers.host;
   console.log("url: "+request.headers.host+request.originalUrl);
   data = data.replace(/\$PAGE_TITLE/g, 'Voter Information');
   data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information source for the 2018 Midterm Elections');
@@ -69,7 +68,6 @@ app.get('/voter', function(request, response){
 app.get('/senate', function(request, response){
   console.log("app.get('/senate') "+request.headers['x-forwarded-for']);
   url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
-  console.log("x-forwarded-for: "+request.headers['x-forwarded-for']);
   httprequest(url, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     const filePath = path.resolve(__dirname, './build', 'index.html');
@@ -116,18 +114,5 @@ app.get('/candidates', function(request, response){
 });
 
 app.use(express.static(path.resolve(__dirname, 'build')));
-
-//app.get('*', function(request, response) {
-//  console.log("app.get(*) "+request.headers['x-forwarded-for']);
-//  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
-//  httprequest(url, { json: true }, (err, res, body) => {
-//    if (err) { return console.log(err); }
-//    console.log("body.region: "+body.region);
-
-//  const filePath = path.resolve(__dirname, 'build', 'index.html');
-//  response.sendFile(filePath);
-//  });
-//});
-
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
