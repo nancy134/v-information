@@ -25,20 +25,17 @@ function replaceMeta(data,body,request){
 
 function replaceMeta2(data,request){
   url = request.headers['x-forwarded-proto']+"://"+request.headers.host;
-  console.log("url: "+request.headers.host+request.originalUrl);
   data = data.replace(/\$PAGE_TITLE/g, 'Voter Information');
   data = data.replace(/\$PAGE_DESCRIPTION/g, 'Information source for the 2018 Midterm Elections');
   data = data.replace(/\$TWITTER_HANDLE/g, '@voterinfo777');
   data = data.replace(/\$TWITTER_IMAGE/g, url+'/midtermsTwitter.jpg');
   data = data.replace(/\$PAGE_URL/g, url+request.originalUrl);
   data = data.replace(/\$SITE_NAME/g, 'Voter Information');
-  //data = data.replace(/\$STATE/g, body.region);
   data = data.replace(/\$IP/g, request.headers['x-forwarded-for']);
   return data;
 }
 
 app.get('/', function(request, response){
-  console.log("app.get('/') "+request.headers['x-forwarded-for']);
   const filePath = path.resolve(__dirname, './build', 'index.html');
   fs.readFile(filePath, 'utf8', function(err, data) {
     if (err) {
