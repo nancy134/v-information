@@ -153,7 +153,8 @@ export default class House extends Component {
     return([
         <Row>
           <Col md={{size: 12}} >
-              <h2>{text}</h2>
+              <h2 className="text-center">{text}</h2>
+<Button color="link"  onClick={() => {this.onShowDistrictSelector()}} className="pl-0">Find another district</Button>
           </Col>
         </Row>
     ]);
@@ -161,7 +162,7 @@ export default class House extends Component {
   renderAddressBar() {
     return (
       <Alert color="primary">
-      <h3>Find your congressional district</h3>
+      <h4>Find the candidates in your congressional district</h4>
       <Row>
       <Col md={10}>
       <PlacesAutocomplete
@@ -237,11 +238,24 @@ export default class House extends Component {
         <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />
       ]);
     } else if (this.state.demCandidate.politician.posts.length == 2) {
-
       return ([
         <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />,
         <TweetEmbed id={this.state.demCandidate.politician.posts[1].social_id} options={{width: '100%'}} />
       ]);
+    } else if (this.state.demCandidate.politician.posts.length == 3) {
+      return ([
+        <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.demCandidate.politician.posts[1].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.demCandidate.politician.posts[2].social_id} options={{width: '100%'}} />
+      ]);
+    } else if (this.state.demCandidate.politician.posts.length == 4) {
+      return ([
+        <TweetEmbed id={this.state.demCandidate.politician.posts[0].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.demCandidate.politician.posts[1].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.demCandidate.politician.posts[2].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.demCandidate.politician.posts[3].social_id} options={{width: '100%'}} />
+      ]);
+
     } else {
       if (!this.state.demCandidate.politician.twitter) {
         return([
@@ -291,7 +305,21 @@ export default class House extends Component {
         <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id}  options={{width: '100%'}} />,
         <TweetEmbed id={this.state.repCandidate.politician.posts[1].social_id}  options={{width: '100%'}}/>
       ]);
+    } else if (this.state.repCandidate.politician.posts.length == 3) {
+      return ([
+        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id}  options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.repCandidate.politician.posts[1].social_id}  options={{width: '100%'}}/>,
+        <TweetEmbed id={this.state.repCandidate.politician.posts[2].social_id}  options={{width: '100%'}}/>
+      ]);
+    } else if (this.state.repCandidate.politician.posts.length == 4) {
+      return ([
+        <TweetEmbed id={this.state.repCandidate.politician.posts[0].social_id}  options={{width: '100%'}} />,
+        <TweetEmbed id={this.state.repCandidate.politician.posts[1].social_id}  options={{width: '100%'}}/>,
+        <TweetEmbed id={this.state.repCandidate.politician.posts[2].social_id}  options={{width: '100%'}}/>,
+        <TweetEmbed id={this.state.repCandidate.politician.posts[3].social_id}  options={{width: '100%'}}/>
+      ]);
     } else {
+
       if (!this.state.repCandidate.politician.twitter) {
         return([
           <p>No twitter account for this candidate</p>
@@ -338,7 +366,9 @@ export default class House extends Component {
   render() {
     return ([
       <Container>
-        <Jumbotron>
+        <Jumbotron className="pt-2">
+          <h2 className="text-center">2018 Midterm Elections</h2>
+          <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats. These elections are important because they determine which party controls the House and Senate.</p>
           <div>{this.renderAddressBar()}</div>
           {this.renderCandidates()}
         </Jumbotron>

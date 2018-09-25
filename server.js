@@ -97,6 +97,39 @@ app.get('/house', function(request, response){
   });
 });
 
+app.get('/contact', function(request, response){
+  console.log("app.get('/house') "+request.headers['x-forwarded-for']);
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
+  httprequest(url, { json: true }, (err, res, body) => {
+    if (err) { return console.log(err); }
+    const filePath = path.resolve(__dirname, './build', 'index.html');
+    fs.readFile(filePath, 'utf8', function(err, data) {
+      if (err) {
+        return console.log(err);
+      }
+      result = replaceMeta(data,body,request);
+      response.send(result);
+    });
+  });
+});
+
+app.get('/state', function(request, response){
+  console.log("app.get('/house') "+request.headers['x-forwarded-for']);
+  url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';
+  httprequest(url, { json: true }, (err, res, body) => {
+    if (err) { return console.log(err); }
+    const filePath = path.resolve(__dirname, './build', 'index.html');
+    fs.readFile(filePath, 'utf8', function(err, data) {
+      if (err) {
+        return console.log(err);
+      }
+      result = replaceMeta(data,body,request);
+      response.send(result);
+    });
+  });
+});
+
+
 app.get('/candidates', function(request, response){
   console.log("app.get('/candidates') "+request.headers['x-forwarded-for']);
   url = 'https://ipinfo.io/'+request.headers['x-forwarded-for'] + '/geo';

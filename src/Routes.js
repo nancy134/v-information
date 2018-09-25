@@ -8,6 +8,7 @@ import Voting from './containers/Voting';
 import Voter from './containers/Voter';
 import Contact from './containers/Contact';
 import Candidates from './containers/Candidates';
+import State from './containers/State';
 
 export default () =>
   <Switch>
@@ -20,6 +21,7 @@ export default () =>
     <Route path="/house" exact component={House} />
     <Route path="/senate" exact component={Senate} />
     <Route path="/voter" exact component={Voter} />
+    <Route path="/state" exact component={State} />
     <Route path="/contact" exact component={Contact} />
     <Route path="/candidates" exact component={Candidates} />
   </Switch>;

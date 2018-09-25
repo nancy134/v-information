@@ -49,6 +49,7 @@ class App extends Component {
               <RouteNavItem href="/house">House</RouteNavItem>
               <RouteNavItem href="/senate">Senate</RouteNavItem>
               <RouteNavItem href="/voter">Voter</RouteNavItem>
+              <RouteNavItem href="/state">State</RouteNavItem> 
               <RouteNavItem href="/contact">Contact</RouteNavItem>
             </Nav>
           </Collapse>

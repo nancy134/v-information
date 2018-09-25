@@ -15,7 +15,7 @@ import { CardDeck, Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 import { Table } from 'reactstrap';
 import { getJsonFromUrl } from '../utils.js';
 
-export default class Voter extends Component {
+export default class State extends Component {
   constructor(props) {
     super(props)
     this.onCheckRegistration = this.onCheckRegistration.bind(this);
@@ -88,7 +88,7 @@ export default class Voter extends Component {
           stateIndex = i;
           redirecting = true;
           //redirect
-          var url = window.location.protocol + "//" + window.location.hostname + "/" + "voter?state="+states[i].id;
+          var url = window.location.protocol + "//" + window.location.hostname + "/" + "state?state="+states[i].id;
           window.location.href = url; 
         } else {
           stateOptions.push(<option value={i}>{states[i].name}</option>);
@@ -158,7 +158,7 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
       text = text + " in " + this.state.states[this.state.selectedStateIndex].name;
     }
     return([
-      <Button color="link" className="btn-wrap" onClick={() => {this.onCheckRegistration()}}><h5>{text}</h5></Button>
+      <Button color="link" className="btn-wrap" onClick={() => {this.onCheckRegistration()}}>{text}</Button>
     ]);
   }
   renderOfficialWebsite(){
@@ -167,7 +167,7 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
       text = "Go to the official " + this.state.states[this.state.selectedStateIndex].name + " voting website";
     }
     return([
-      <Button color="link" className="btn-wrap" onClick={() => {this.onOfficialWebsite()}}><h5>{text}</h5></Button>
+      <Button color="link" className="btn-wrap" onClick={() => {this.onOfficialWebsite()}}>{text}</Button>
     ]);
   }
   renderWebsites(){
@@ -180,13 +180,13 @@ var url = window.location.protocol + "//" + window.location.hostname + "/" + "se
         color="link"
         className="btn-wrap"
         onClick={()=> {this.onRockTheVote()}}>
-        <h5>rockthevote.org</h5>
+        rockthevote.org
       </Button>,
       <Button
         color="link"
         className="btn-wrap"
         onClick={() => {this.onHeadCount()}}>
-        <h5>headcount.org</h5>
+        headcount.org
       </Button>
 
     ]);
@@ -382,22 +382,22 @@ If you don't know your congressional district you can find it <a href="./house">
     <Container>
       <Jumbotron className="pt-2 pb-2">
         <h2 className="text-center">2018 Midterm Elections</h2>
-        <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats.</p>
-        <h4 className="text-center">Select a state to get information about the election in your state.</h4>
+        <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats. These elections are important because they determine which party controls the House and Senate.</p>
+        <h4 className="text-center">Select a state to find out the candidates up for election</h4>
         <Row className="m-3">
           <Col md={{size: 4, offset: 4}} className="text-center">
             {this.renderStateSelector()}
           </Col>
         </Row>
       </Jumbotron>
-      {this.renderVoterInformation()}
       {this.renderSenateCandidates()}
       {this.renderCongressionalCandidates()}
+      {this.renderVoterInformation()}
     </Container>
     ]);
   }
   }
 }
-Voter.contextTypes = {
+State.contextTypes = {
   mixpanel: PropTypes.object.isRequired
 }

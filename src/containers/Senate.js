@@ -172,6 +172,19 @@ export default class Senate extends Component {
         <TweetEmbed id={candidate.politician.posts[0].social_id} options={{width: '100%'}} />,
         <TweetEmbed id={candidate.politician.posts[1].social_id} options={{width: '100%'}}/>
       ]);
+    } else if (candidate.politician.posts.length == 3) {
+      return ([
+        <TweetEmbed id={candidate.politician.posts[0].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={candidate.politician.posts[1].social_id} options={{width: '100%'}}/>,
+        <TweetEmbed id={candidate.politician.posts[2].social_id} options={{width: '100%'}}/>
+      ]);
+    } else if (candidate.politician.posts.length == 4) {
+      return ([
+        <TweetEmbed id={candidate.politician.posts[0].social_id} options={{width: '100%'}} />,
+        <TweetEmbed id={candidate.politician.posts[1].social_id} options={{width: '100%'}}/>,
+        <TweetEmbed id={candidate.politician.posts[2].social_id} options={{width: '100%'}}/>,
+        <TweetEmbed id={candidate.politician.posts[3].social_id} options={{width: '100%'}}/>
+      ]);
     } else {
       if (!candidate.politician.twitter) {
         return([
@@ -238,7 +251,10 @@ export default class Senate extends Component {
     if (this.state.stateIndex > -1){
     return ([
       <Container>
-        <Jumbotron>
+        <Jumbotron className="pt-2">
+          <h2 className="text-center">2018 Midterm Elections</h2>
+          <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats. These elections are important because they determine which party controls the House and Senate.</p>
+
           {this.renderTitle()}
           {this.renderCandidates()}
         </Jumbotron>
