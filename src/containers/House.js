@@ -20,7 +20,7 @@ export default class House extends Component {
     if (results.district) districtId = results.district;
     if (results.state) stateId = results.state;
 
-    var showDistrictSelector = false;
+    var showDistrictSelector = true;
 
     if (stateId && districtId) showDistrictSelector = true;
     this.state = {
@@ -154,68 +154,84 @@ export default class House extends Component {
         <Row>
           <Col md={{size: 12}} >
               <h2 className="text-center">{text}</h2>
-<Button color="link"  onClick={() => {this.onShowDistrictSelector()}} className="pl-0">Find another district</Button>
           </Col>
         </Row>
     ]);
   }
-  renderAddressBar() {
+  renderSearchBar(){
+    return([
+        <div>
+        <h3 className="text-center">Find House Candidates in your District</h3>
+        <Row>
+          <Col>
+            <Alert color="primary">
+            <h5>I don't know my congressional district</h5>
+            {this.renderAddressSelector()}
+            </Alert>
+          </Col>
+          <Col>
+            <Alert color="primary">
+            {this.renderDistrictSelector()}
+            </Alert>
+          </Col>
+        </Row>
+        </div>
+    ]);
+  }
+  renderAddressSelector() {
     return (
-      <Alert color="primary">
-      <h4>Find the candidates in your congressional district</h4>
       <Row>
-      <Col md={10}>
-      <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input
-              {...getInputProps({
-                placeholder: 'Enter your home address...',
-                className: 'form-control location-search-input',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
+      <Col md={9}>
+        <PlacesAutocomplete
+          value={this.state.address}
+          onChange={this.handleChange}
+          onSelect={this.handleSelect}
+        >
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <div>
+              <input
+                {...getInputProps({
+                  placeholder: 'Enter your home address...',
+                  className: 'form-control location-search-input',
+                })}
+              />
+              <div className="autocomplete-dropdown-container">
+                {loading && <div>Loading...</div>}
+                {suggestions.map(suggestion => {
+                  const className = suggestion.active
+                    ? 'suggestion-item--active'
+                    : 'suggestion-item';
+                  // inline style for demonstration purpose
+                  const style = suggestion.active
+                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                        style,
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-      </Col>
-      <Col sm={2}>
-      <Button onClick={() => {this.onFindDistrict()}}>Find District</Button>
-      </Col>
-      </Row>
-      <Button color="link"  onClick={() => {this.onShowDistrictSelector()}} className="pl-0">I already know my congressional district</Button>
-       {this.renderDistrictSelector()}
-      </Alert>
+          )}
+        </PlacesAutocomplete>
+        </Col>
+        <Col md={3}>
+        <Button onClick={() => {this.onFindDistrict()}}>Find District</Button>
+        </Col>
+        </Row>
     );
   }
   renderDistrictSelector() {
     if (this.state.showDistrictSelector){
     return ([
+      <div>
+      <h5>I know my congressional district</h5>
       <Form inline>
    
       <Input type="select" name="state" disabled={(this.state.stateDisabled)? "disabled" : ""} onChange={this.handleStateChange}>
@@ -226,6 +242,7 @@ export default class House extends Component {
       </Input>
       <Button>Find Candidates</Button>
       </Form>
+      </div>
     ]);
     }
   }
@@ -342,11 +359,11 @@ export default class House extends Component {
         <div>
         {this.renderTitle()}
         <Row>
-          <Col>
+          <Col md={6}>
             {this.renderDemCandidateName()}
             {this.renderDemCandidatePosts()}
           </Col>
-          <Col>
+          <Col md={6}>
             {this.renderRepCandidateName()}
             {this.renderRepCandidatePosts()}
           </Col>
@@ -366,10 +383,14 @@ export default class House extends Component {
   render() {
     return ([
       <Container>
-        <Jumbotron className="pt-2">
+        <Jumbotron className="pt-2 pb-2">
           <h2 className="text-center">2018 Midterm Elections</h2>
-          <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats. These elections are important because they determine which party controls the House and Senate.</p>
-          <div>{this.renderAddressBar()}</div>
+          <p className="text-center">The midterm elections are the general elections that are held in the middle of the presidential term.  During the midterm election all 435 seats in the House of Representatives are up for election and 33 Senate seats.</p>
+        </Jumbotron>
+        <Jumbotron className="pt-2 pb-2">
+          {this.renderSearchBar()}
+        </Jumbotron>
+        <Jumbotron className="pt-2 pb-2">
           {this.renderCandidates()}
         </Jumbotron>
       </Container>
