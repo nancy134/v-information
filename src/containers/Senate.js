@@ -233,11 +233,11 @@ export default class Senate extends Component {
       } else {
       return([
         <Row>
-          <Col>
+          <Col md={6}>
             {this.renderFirstCandidateName()}
             {this.renderFirstCandidatePosts()}
           </Col>
-          <Col>
+          <Col md={6}>
             {this.renderSecondCandidateName()}
             {this.renderSecondCandidatePosts()}
           </Col>
