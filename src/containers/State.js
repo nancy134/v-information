@@ -118,7 +118,7 @@ export default class State extends Component {
   }
   handleStateChange(e){
     var selectedStateIndex = e.target.value;
-var url = window.location.protocol + "//" + window.location.hostname + "/" + "voter?state="+this.state.states[selectedStateIndex].id;
+var url = window.location.protocol + "//" + window.location.hostname + "/" + "state?state="+this.state.states[selectedStateIndex].id;
     window.location.href = url; 
   }
   onCheckRegistration(){
