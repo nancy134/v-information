@@ -10,7 +10,6 @@ import States from '../actions/States';
 import { Form, FormGroup, Input } from 'reactstrap';
 import { getJsonFromUrl } from '../utils.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaBeer } from 'react-icons/fa';
 import { FaCheck } from 'react-icons/fa';
 import { FaTimes } from 'react-icons/fa';
 

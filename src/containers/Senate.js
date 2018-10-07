@@ -6,6 +6,8 @@ import TweetEmbed from 'react-tweet-embed';
 import States from '../actions/States';
 import Campaigns from '../actions/Campaigns';
 import { getJsonFromUrl } from '../utils.js';
+import { FaCheck } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 
 export default class Senate extends Component {
   constructor(props) {
@@ -136,10 +138,19 @@ export default class Senate extends Component {
     if (candidate){
       if (candidate.politician.party == 'democrat'){
         party = "(D)";
+        return([
+          <h3><FaCheck color="green" />{candidate.politician.first_name} {candidate.politician.last_name} {party}</h3>
+        ]);
       } else if (candidate.politician.party == 'republican'){
         party = "(R)";
+        return([
+          <h3 className="rep-name"><FaTimes color="red" />{candidate.politician.first_name} {candidate.politician.last_name} {party}</h3>
+        ]);
       } else if (candidate.politician.party == 'independent'){
         party = "(I)";
+        return([
+          <h3><FaCheck color="green" />{candidate.politician.first_name} {candidate.politician.last_name} {party}</h3>
+        ]);
       }
       return([
         <h3>{candidate.politician.first_name} {candidate.politician.last_name} {party}</h3>
