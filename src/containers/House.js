@@ -9,6 +9,10 @@ import Campaigns from '../actions/Campaigns';
 import States from '../actions/States';
 import { Form, FormGroup, Input } from 'reactstrap';
 import { getJsonFromUrl } from '../utils.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaBeer } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 
 export default class House extends Component {
   constructor(props) {
@@ -289,7 +293,7 @@ export default class House extends Component {
   renderDemCandidateName() {
     if (this.state.demCandidate){
       return([
-        <h3 className="text-primary">{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
+        <h3 className="text-primary"><FaCheck color="green" />{this.state.demCandidate.politician.first_name} {this.state.demCandidate.politician.last_name} (D)</h3> 
       ]);
     } else {
       return([
@@ -300,7 +304,7 @@ export default class House extends Component {
   renderRepCandidateName() {
     if (this.state.repCandidate){
       return([
-        <h3 className="text-primary">{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
+        <h3 className="rep-name text-primary"><FaTimes color="red"/>{this.state.repCandidate.politician.first_name} {this.state.repCandidate.politician.last_name} (R)</h3>
       ]);
     } else {
       return([

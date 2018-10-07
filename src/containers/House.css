@@ -10,3 +10,6 @@
    background: rgba(233,236,239, 0.5) !important;
 }
 
+.rep-name {
+  text-decoration: line-through;
+}

@@ -5,3 +5,7 @@
 .btn-wrap {
   white-space: normal !important;
 }
+
+.rep-name {
+  text-decoration: line-through;
+}
